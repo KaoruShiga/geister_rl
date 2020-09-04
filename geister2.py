@@ -74,25 +74,25 @@ class Geister2(Geister):
         crr_state = [[0 for _ in range(6*7)] for _ in range(3)]
         side_list = [0, 0, 0, 0, 0, 0]
         for unit in self.units:
-            # colorIndex = {'B': 0, 'b': 1, 'R': 2, 'r':3} ‘å•¶š‚Í–¡•û
-            if unit.x == 9 and unit.y == 9:  # æ‚ç‚ê‚½‹î
-                if unit.color == 0:    # BLUE(–¡•û‚ÌÂ)
+            # colorIndex = {'B': 0, 'b': 1, 'R': 2, 'r':3} å¤§æ–‡å­—ã¯å‘³æ–¹
+            if unit.x == 9 and unit.y == 9:  # å–ã‚‰ã‚ŒãŸé§’
+                if unit.color == 0:    # BLUE(å‘³æ–¹ã®é’)
                     side_list[2] += 1
-                if unit.color == 2:    # RED(–¡•û‚ÌÔ)
+                if unit.color == 2:    # RED(å‘³æ–¹ã®èµ¤)
                     side_list[3] += 1
-                if unit.color == 1:    # b(“G‚ÌÂ)
+                if unit.color == 1:    # b(æ•µã®é’)
                     side_list[0] += 1
-                if unit.color == 3:    # r(“G‚ÌÔ)
+                if unit.color == 3:    # r(æ•µã®èµ¤)
                     side_list[1] += 1
-            elif unit.x == 8 and unit.y == 8:   # ’Eo‹î
+            elif unit.x == 8 and unit.y == 8:   # è„±å‡ºé§’
                 side_list[5] = 1
-            elif unit.color == 0:    # BLUE(–¡•û‚ÌÂ)
+            elif unit.color == 0:    # BLUE(å‘³æ–¹ã®é’)
                 current_state[0][unit.x+6*unit.y] = 1
                 crr_state[0][unit.x+6*unit.y] = 1
-            elif unit.color == 2:    # RED(–¡•û‚ÌÔ)
+            elif unit.color == 2:    # RED(å‘³æ–¹ã®èµ¤)
                 current_state[1][unit.x+6*unit.y] = 2
                 crr_state[1][unit.x+6*unit.y] = 1
-            else:                    # “G‹î
+            else:                    # æ•µé§’
                 current_state[2][unit.x+6*unit.y] = 3
                 crr_state[2][unit.x+6*unit.y] = 1
         for i in range(len(side_list)):
@@ -111,8 +111,8 @@ class Geister2(Geister):
             state = copy.deepcopy(crr_state)
             unit = self.units[i]
             x, y = unit.x, unit.y
-            color = 1 if (unit.color == 0) else (      # BLUE(–¡•û‚ÌÂ)
-                    2 if (unit.color == 2) else "n")   # RED(–¡•û‚ÌÔ)
+            color = 1 if (unit.color == 0) else (      # BLUE(å‘³æ–¹ã®é’)
+                    2 if (unit.color == 2) else "n")   # RED(å‘³æ–¹ã®èµ¤)
             state[color-1][x+y*6] = 0
             if(d == 0):    # 'E'
                 x += 1

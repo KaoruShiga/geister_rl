@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: shift-jis -*-
+# -*- coding: utf-8 -*-
 import unit
 
 

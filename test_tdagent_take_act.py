@@ -60,7 +60,7 @@ class TestActFromQ(unittest.TestCase):
             0, 0, 0, 0, 0, 0
         ])
 
-    # ƒeƒXƒg‚Íˆê—á‚Ì‚İ()
+    # ãƒ†ã‚¹ãƒˆã¯ä¸€ä¾‹ã®ã¿()
     def test_get_1ht_afterstates(self):
         seed = 0
         game = Geister2()

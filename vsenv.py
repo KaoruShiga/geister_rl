@@ -4,8 +4,8 @@ from geister2 import Geister2
 
 
 class VsEnv:
-    "w’è‚µ‚½ŒÅ’è‘Šè‚Æ‘Îí‚·‚éŠÂ‹«"
-    "Œ»İ‚ÍŠwKAgent‚ªæèturn=0‚ÅŒÅ’è"
+    "æŒ‡å®šã—ãŸå›ºå®šç›¸æ‰‹ã¨å¯¾æˆ¦ã™ã‚‹ç’°å¢ƒ"
+    "ç¾åœ¨ã¯å­¦ç¿’AgentãŒå…ˆæ‰‹turn=0ã§å›ºå®š"
     def is_ended(self):
         return self._game.is_ended()
 
@@ -50,7 +50,7 @@ class VsEnv:
         self._seed = seed
 
         self.S_SIZE = (6*6+6)*3
-        # self.A_SIZE = 8*4  # —LŒøÅ‘åŒó•âè
+        # self.A_SIZE = 8*4  # æœ‰åŠ¹æœ€å¤§å€™è£œæ‰‹
 
 
 # debug for cmd(tmp)
