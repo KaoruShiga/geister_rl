@@ -59,7 +59,7 @@ def match(first, second, logEnable, outputLevel, matchCount):
     return results
 
 
-parser = argparse.ArgumentParser(description='ã“ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®èª¬æ˜ï¼ˆãªãã¦ã‚‚ã‚ˆã„ï¼‰')
+parser = argparse.ArgumentParser(description='‚±‚ÌƒvƒƒOƒ‰ƒ€‚Ìà–¾i‚È‚­‚Ä‚à‚æ‚¢j')
 
 parser.add_argument('player1')
 parser.add_argument('player2')

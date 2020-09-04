@@ -7,7 +7,7 @@ from vsenv import VsEnv
 
 
 class TDAgent(IAgent):
-    # æœªæ¤œè¨¼
+    # –¢ŒŸØ
     def learn(self, env, seed=1):
         alpha = self.alpha
         epsilon = self.epsilon
@@ -17,7 +17,7 @@ class TDAgent(IAgent):
 
         episodes_x = []
         results_y = []
-        # wã‚’å°ã•ãªæ­£è¦ä¹±æ•°ã§åˆæœŸåŒ–
+        # w‚ğ¬‚³‚È³‹K—”‚Å‰Šú‰»
         np.random.seed(seed)
         self.w = w = np.random.randn(S_SIZE)*alpha*2
 
@@ -70,7 +70,7 @@ class TDAgent(IAgent):
             state[0] + state[1] + state[2]
             for state in afterstates]
         x = np.array(states_1ht)
-        # äºŒé§’é–¢ä¿‚
+        # “ñ‹îŠÖŒW
         # y = np.dot(x, x.reshape(-1,1))
         # return y
         return x
