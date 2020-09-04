@@ -1,0 +1,2 @@
+geister.pyとunit.pyは講義準拠
+仕様変更はoverrideで実装
