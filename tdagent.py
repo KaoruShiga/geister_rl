@@ -51,7 +51,7 @@ class TDAgent(IAgent):
                 w = w + alpha*(nq - q)*x[a]
                 x = nx
                 a = na
-            q = np.dot(x[a], w)
+            q = 2/(1 + np.exp(-np.dot(x[a], w))) - 1
             w = w + alpha*(r - q)*x[a]
 
             episodes_x.append(episode)
