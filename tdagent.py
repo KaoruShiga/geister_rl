@@ -46,15 +46,16 @@ class TDAgent(IAgent):
                     break
                 nx = self.get_x(nafterstates)
                 na = self.get_act(w, nx)
-                q = np.dot(x[a], w)
-                nq = np.dot(nx[na], w)
+                q = 2/(1 + np.exp(-np.dot(x[a], w))) - 1
+                nq = 2/(1+np.exp(-np.dot(nx[na], w))) - 1
                 w = w + alpha*(nq - q)*x[a]
                 x = nx
                 a = na
-            episodes_x.append(episode)
-            results_y.append(r)
             q = np.dot(x[a], w)
             w = w + alpha*(r - q)*x[a]
+
+            episodes_x.append(episode)
+            results_y.append(r)
             if (episode+1) % plt_intvl == 0:
                 x_list = plt_intvl*np.arange((episode+1)/plt_intvl)
                 y_list = np.array(results_y)
