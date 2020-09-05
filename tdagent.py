@@ -47,7 +47,9 @@ class TDAgent(IAgent):
                 nx = self.get_x(nafterstates)
                 na = self.get_act(w, nx)
                 q = np.dot(x[a], w)
-                nq = np.dot(nx[na], w)
+                # q-learning
+                greedy_na = self.get_greedy_a(w, nx)
+                nq = np.dot(nx[greedy_na], w)
                 w = w + alpha*(nq - q)*x[a]
                 x = nx
                 a = na

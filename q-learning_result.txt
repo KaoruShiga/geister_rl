@@ -1,0 +1,4 @@
+q-learningはほとんど学習できなかった．
+これは，関数近似と，ブーストラップ化でのoff policylearningが原因だろう．
+関数近似，ブーストラップ，off policyの三つを同時に学習できる方法は知られていない
+(by sutton.2nd p264)
