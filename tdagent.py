@@ -1,13 +1,27 @@
 import random
 import numpy as np
+import matplotlib.pyplot as plt
 from iagent import IAgent
 from random_agent import RandomAgent
 from geister2 import Geister2
 from vsenv import VsEnv
 
 
+def learn():
+    seed = 23
+    game = Geister2()
+    tdagent = TDAgent(game, seed)
+    rndagent = RandomAgent(game, seed)
+    env = VsEnv(rndagent, game, seed)
+    tdagent.learn(env, seed)
+    for j in range(3):
+        for i in range(7):
+            print((tdagent.w[i*6+j*(6*6+6):i*6+6+j*(6*6+6)]*1000)
+                  .round()*(1/1000))
+        print("-------------------")
+
+
 class TDAgent(IAgent):
-    # 未検証
     def learn(self, env, seed=1):
         alpha = self.alpha
         epsilon = self.epsilon
@@ -15,6 +29,7 @@ class TDAgent(IAgent):
         S_SIZE = env.S_SIZE
         self.S_SIZE = S_SIZE
 
+        plt_intvl = 100
         episodes_x = []
         results_y = []
         # wを小さな正規乱数で初期化
@@ -28,10 +43,6 @@ class TDAgent(IAgent):
             for t in range(300):
                 r, nafterstates = env.on_action_number_received(a)
                 if r != 0:
-                    episodes_x.append(episode)
-                    results_y.append(r)
-                    q = np.dot(x[a], w)
-                    w = w + alpha*(r - q)*x[a]
                     break
                 nx = self.get_x(nafterstates)
                 na = self.get_act(w, nx)
@@ -40,6 +51,22 @@ class TDAgent(IAgent):
                 w = w + alpha*(nq - q)*x[a]
                 x = nx
                 a = na
+            episodes_x.append(episode)
+            results_y.append(r)
+            q = np.dot(x[a], w)
+            w = w + alpha*(r - q)*x[a]
+            if (episode+1) % plt_intvl == 0:
+                x_list = plt_intvl*np.arange((episode+1)/plt_intvl)
+                y_list = np.array(results_y)
+                y_list = y_list.reshape(-1, plt_intvl)
+                means = y_list.mean(axis=1)
+                plt.figure(2)
+                plt.title('Training...')
+                plt.xlabel('Episode')
+                plt.ylabel('Mean Results of Interval')
+                plt.plot(x_list, means)
+                plt.pause(0.0001)  # pause a bit so that plots are updated
+                plt.clf()
         self.w = w
 
     def get_act(self, w, x):
@@ -72,7 +99,8 @@ class TDAgent(IAgent):
         x = np.array(states_1ht)
         # 二駒関係
         # y = np.dot(x, x.reshape(-1,1))
-        # return y
+        # 三駒関係ならさらに追加
+        # z = np.dot(y, x.reshape(-1,1))
         return x
 
     def get_act_afterstates(self, states):
@@ -92,7 +120,7 @@ class TDAgent(IAgent):
         self.w = "midainyuu"
 
 
-if __name__ == "__main__":
+def test():
     seed = 2
     game = Geister2()
 
@@ -142,3 +170,8 @@ if __name__ == "__main__":
         game.changeSide()
 
         player = (player+1) % 2
+
+
+if __name__ == "__main__":
+    # test()
+    learn()
