@@ -8,11 +8,10 @@ from random_agent import RandomAgent
 
 
 def learn():
-    file_name = "td_7"
-    seed = 306
+    file_name = "td_8"
+    seed = 91
     game = Geister2()
     mcagent = MCAgent(game, seed)
-    mcagent.w = np.load("td_4.npy")
     opponent = RandomAgent(game, seed+1)
     env = VsEnv(opponent, game, seed)
     mcagent.learn(env, seed)
@@ -39,10 +38,12 @@ class MCAgent(IAgent):
         plt_intvl = 100
         episodes_x = []
         results_y = []
+        # 読み込み
+        # mcagent.w = np.load("td_4.npy")
         # wを小さな正規乱数で初期化
         np.random.seed(seed)
         w = self.w
-        # self.w = w = np.random.randn(S_SIZE**2)*alpha*2 + alpha*2
+        self.w = w = np.random.randn(S_SIZE**2)*alpha*2 + alpha*2
 
         for episode in range(10000):
             afterstates = env.on_episode_begin(self.init_red())
@@ -62,7 +63,7 @@ class MCAgent(IAgent):
             # qs = np.dot(xa_arr, w)
             # w = w + np.dot(xa_arr.T, alpha*(r - qs))
             for xa in xa_list[::-1]:
-                q = np.dot(xa, w)
+                q = 2/(1 + np.exp(-np.dot(xa, w))) - 1
                 w = w + alpha*(r - q)*xa
 
             results_y.append(r)
@@ -80,11 +81,11 @@ class MCAgent(IAgent):
                 plt.pause(0.0001)  # pause a bit so that plots are updated
                 plt.clf()
         self.w = w
+
         plt.figure(2)
         plt.title('Training...')
         plt.xlabel('Episode')
         plt.ylabel('Mean Results of Interval')
-        episodes_x.append(episode)
         x_list = np.array(episodes_x)
         y_list = np.array(results_y)
         y_list = y_list.reshape(-1, plt_intvl)
@@ -103,9 +104,23 @@ class MCAgent(IAgent):
 
     # random
     def init_red(self):
-        arr = ["A", "B", "C", "D", "E", "F", "G", "H"]
-        self._rnd.shuffle(arr)
-        return arr[0:4]
+        arr_string = ["A", "B", "C", "D", "E", "F", "G", "H"]
+        if self.epsilon < self._rnd.random():  # P(1-epsilon): greedy
+            states = self._game.init_states()
+            x = self.get_x(states)
+            act_i = self.get_greedy_a(self.w, x)
+            state = states[act_i]
+            arr = []
+            arr[0:4] = state[1][25:29]
+            arr[4:8] = state[1][31:35]
+            dst = []
+            for i in range(len(arr)):
+                if arr[i] == 1:
+                    dst.append(arr_string[i])
+            return dst
+        else:  # P(epsilon): explore
+            self._rnd.shuffle(arr_string)
+            return arr_string[0:4]
 
     def get_greedy_a(self, w, x):
         Q_list = np.dot(x, w)
@@ -137,7 +152,8 @@ class MCAgent(IAgent):
         self._rnd = random.Random(seed)
 
         self.epsilon = 0.3
-        self.alpha = 0.00001
+        self.init_epsilon = 0.3
+        self.alpha = 0.0001
         self.S_SIZE = (6*6+6)*3
 
         self.w = "midainyuu"
@@ -195,6 +211,13 @@ def test():
         player = (player+1) % 2
 
 
+def test2():
+    mcagent = MCAgent(Geister2())
+    mcagent.w = np.load("td_4.npy")
+    print(mcagent.init_red())
+
+
 if __name__ == "__main__":
     # test()
     learn()
+    # test2()

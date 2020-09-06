@@ -70,7 +70,6 @@ class Geister2(Geister):
     "side_list[2, 3] is the number of taken blue,red owned by the observer"
     "side_list[4, 5] is take_flg,exit_flg"
     def crr_state(self):
-        current_state = [[0 for _ in range(6*7)] for _ in range(3)]
         crr_state = [[0 for _ in range(6*7)] for _ in range(3)]
         side_list = [0, 0, 0, 0, 0, 0]
         for unit in self.units:
@@ -87,18 +86,14 @@ class Geister2(Geister):
             elif unit.x == 8 and unit.y == 8:   # 脱出駒
                 side_list[5] = 1
             elif unit.color == 0:    # BLUE(味方の青)
-                current_state[0][unit.x+6*unit.y] = 1
                 crr_state[0][unit.x+6*unit.y] = 1
             elif unit.color == 2:    # RED(味方の赤)
-                current_state[1][unit.x+6*unit.y] = 2
                 crr_state[1][unit.x+6*unit.y] = 1
             else:                    # 敵駒
-                current_state[2][unit.x+6*unit.y] = 3
                 crr_state[2][unit.x+6*unit.y] = 1
         for i in range(len(side_list)):
             side_num = side_list[i]
             if side_num > 0:
-                current_state[side_num-1][6*6 + i] = 1
                 crr_state[side_num-1][6*6 + i] = 1
         return crr_state
 
@@ -132,6 +127,41 @@ class Geister2(Geister):
                 state[color-1][x+y*6] = 1
             dst.append(state)
         return dst
+
+    def init_states(self):
+        arrs = []
+        for x in range(8):
+            arr = [1, 1, 1, 1, 1, 1, 1, 1]
+            arr[x] = 2
+            for y in range(x+1, 8):
+                arr[y] = 2
+                for z in range(y+1, 8):
+                    arr[z] = 2
+                    for t in range(z+1, 8):
+                        arr[t] = 2
+                        arrs.append(arr.copy())
+                        arr[t] = 1
+                    arr[z] = 1
+                arr[y] = 1
+            arr[x] = 1
+        _ = "_"
+        state = [
+            0, 3, 3, 3, 3, 0,
+            0, 3, 3, 3, 3, 0,
+            0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0,
+            0, _, _, _, _, 0,
+            0, _, _, _, _, 0,
+            0, 0, 0, 0, 0, 0
+        ]
+        states = []
+        for arr in arrs:
+            state[25:29] = arr[0:4]
+            state[31:35] = arr[4:8]
+            states.append(state.copy())
+        state_1ht = [[[(1 if (a-1 == i) else 0) for a in state]
+                     for i in range(3)] for state in states]
+        return state_1ht
 
     def is_ended(self):
         return self.checkResult() != 0
@@ -186,9 +216,11 @@ if __name__ == "__main__":
     # game.printBoard()
     after_states = game.after_states()
     # game.print_states(after_states)
-    game.print_states(after_states)
-    print(game.view_of_states(after_states))
+    # game.print_states(after_states)
+    # print(game.view_of_states(after_states))
 
+    print()
+    game.print_states(game.init_states())
     # test for moves and on_action_number_received
     # game = Geister2()
     # game.setRed(["E", "F", "G", "H"])
