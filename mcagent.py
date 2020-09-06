@@ -59,9 +59,6 @@ class MCAgent(IAgent):
                 xa_list.append(nx[na])
                 x = nx
                 a = na
-            # xa_arr = np.array(xa_list)
-            # qs = np.dot(xa_arr, w)
-            # w = w + np.dot(xa_arr.T, alpha*(r - qs))
             for xa in xa_list[::-1]:
                 q = 2/(1 + np.exp(-np.dot(xa, w))) - 1
                 w = w + alpha*(r - q)*xa
@@ -105,7 +102,7 @@ class MCAgent(IAgent):
     # random
     def init_red(self):
         arr_string = ["A", "B", "C", "D", "E", "F", "G", "H"]
-        if self.epsilon < self._rnd.random():  # P(1-epsilon): greedy
+        if self.init_epsilon < self._rnd.random():  # P(1-epsilon): greedy
             states = self._game.init_states()
             x = self.get_x(states)
             act_i = self.get_greedy_a(self.w, x)
@@ -153,7 +150,7 @@ class MCAgent(IAgent):
 
         self.epsilon = 0.3
         self.init_epsilon = 0.3
-        self.alpha = 0.0001
+        self.alpha = 0.001
         self.S_SIZE = (6*6+6)*3
 
         self.w = "midainyuu"
