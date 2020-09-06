@@ -1,34 +1,34 @@
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-from iagent import IAgent
-from random_agent import RandomAgent
 from geister2 import Geister2
 from vsenv import VsEnv
+from iagent import IAgent
+from random_agent import RandomAgent
 
 
 def learn():
-    file_name = "td_6"
-    seed = 320
+    file_name = "td_7"
+    seed = 306
     game = Geister2()
-    tdagent = TDAgent(game, seed)
-    opponent = TDAgent(game, seed)
-    opponent.w = np.load("td_4.npy")
+    mcagent = MCAgent(game, seed)
+    mcagent.w = np.load("td_4.npy")
+    opponent = RandomAgent(game, seed+1)
     env = VsEnv(opponent, game, seed)
-    tdagent.learn(env, seed)
+    mcagent.learn(env, seed)
     for k in range(6*7*3):
         for i in range(3):
             for j in range(7):
-                print((tdagent.w[j+i*(6*7)+k*(6*7*3):6+j+i*(6*7)+k*(6*7*3)]
+                print((mcagent.w[j+i*(6*7)+k*(6*7*3):6+j+i*(6*7)+k*(6*7*3)]
                       * 1000).round()*(1/1000))
             print("-----------")
         print("-------------------")
-    np.save(file_name, tdagent.w)
+    np.save(file_name, mcagent.w)
     w_td = np.load(file_name+'.npy')
     print(w_td.shape)
 
 
-class TDAgent(IAgent):
+class MCAgent(IAgent):
     def learn(self, env, seed=1):
         alpha = self.alpha
         epsilon = self.epsilon
@@ -41,49 +41,54 @@ class TDAgent(IAgent):
         results_y = []
         # wを小さな正規乱数で初期化
         np.random.seed(seed)
-        self.w = w = np.random.randn(S_SIZE**2)*alpha*2 + alpha*2
+        w = self.w
+        # self.w = w = np.random.randn(S_SIZE**2)*alpha*2 + alpha*2
 
         for episode in range(10000):
             afterstates = env.on_episode_begin(self.init_red())
             x = self.get_x(afterstates)
             a = self.get_act(w, x)
+            xa_list = [x[a]]
             for t in range(300):
                 r, nafterstates = env.on_action_number_received(a)
                 if r != 0:
                     break
                 nx = self.get_x(nafterstates)
                 na = self.get_act(w, nx)
-                q = np.dot(x[a], w)
-                nq = np.dot(nx[na], w)
-                w = w + alpha*(nq - q)*x[a]
+                xa_list.append(nx[na])
                 x = nx
                 a = na
-            q = np.dot(x[a], w)
-            w = w + alpha*(r - q)*x[a]
+            # xa_arr = np.array(xa_list)
+            # qs = np.dot(xa_arr, w)
+            # w = w + np.dot(xa_arr.T, alpha*(r - qs))
+            for xa in xa_list[::-1]:
+                q = np.dot(xa, w)
+                w = w + alpha*(r - q)*xa
 
-            episodes_x.append(episode)
             results_y.append(r)
             if (episode+1) % plt_intvl == 0:
-                x_list = plt_intvl*np.arange((episode+1)/plt_intvl)
-                y_list = np.array(results_y)
-                y_list = y_list.reshape(-1, plt_intvl)
-                means = y_list.mean(axis=1)
                 plt.figure(2)
                 plt.title('Training...')
                 plt.xlabel('Episode')
                 plt.ylabel('Mean Results of Interval')
+                episodes_x.append(episode)
+                x_list = np.array(episodes_x)
+                y_list = np.array(results_y)
+                y_list = y_list.reshape(-1, plt_intvl)
+                means = y_list.mean(axis=1)
                 plt.plot(x_list, means)
                 plt.pause(0.0001)  # pause a bit so that plots are updated
                 plt.clf()
         self.w = w
-        x_list = plt_intvl*np.arange((episode+1)/plt_intvl)
-        y_list = np.array(results_y)
-        y_list = y_list.reshape(-1, plt_intvl)
-        means = y_list.mean(axis=1)
         plt.figure(2)
         plt.title('Training...')
         plt.xlabel('Episode')
         plt.ylabel('Mean Results of Interval')
+        episodes_x.append(episode)
+        x_list = np.array(episodes_x)
+        y_list = np.array(results_y)
+        y_list = y_list.reshape(-1, plt_intvl)
+        means = y_list.mean(axis=1)
         plt.plot(x_list, means)
 
     def get_act(self, w, x):
@@ -132,7 +137,7 @@ class TDAgent(IAgent):
         self._rnd = random.Random(seed)
 
         self.epsilon = 0.3
-        self.alpha = 0.001
+        self.alpha = 0.00001
         self.S_SIZE = (6*6+6)*3
 
         self.w = "midainyuu"
@@ -142,7 +147,7 @@ def test():
     seed = 2
     game = Geister2()
 
-    tdagent = TDAgent(game, seed)
+    tdagent = MCAgent(game, seed)
     tdagent.w = np.array([
         0.9, 0, 0, 0, 0, 0,
         0.8, 0, 0, 0, 0, 0,
