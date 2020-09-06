@@ -1,0 +1,7 @@
+i:0 j:1 mean: 0.5
+i:0 j:2 mean: 0.08  i:1 j:2 mean:  0.44
+i:0 j:3 mean: 0.68  i:1 j:3 mean:  0.46 i:2 j:3 mean: 0.7
+i:0 j:4 mean: 0.22  i:1 j:4 mean:  0.32 i:2 j:4 mean: 0.66 i:3 j:4 mean:0.3
+i:0 j:5 mean: 0.62  i:1 j:5 mean:  0.58 i:2 j:5 mean: 0.94 i:3 j:5 mean:0.62 i:4 j:5 mean:0.74
+i:0 j:6 mean: 0.52  i:1 j:6 mean:  0.68 i:2 j:6 mean: 0.82 i:3 j:6 mean:0.56 i:4 j:6 mean:0.9  i:5 j:6 mean:0.3
+i:0 j:7 mean: 0.16  i:1 j:7 mean:  0.46 i:2 j:7 mean: 0.54 i:3 j:7 mean:0.44 i:4 j:7 mean:0.42 i:5 j:7 mean:0.08 i:6 j:7 mean:0.22
