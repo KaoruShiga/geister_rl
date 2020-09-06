@@ -8,17 +8,22 @@ from vsenv import VsEnv
 
 
 def learn():
-    seed = 23
+    seed = 560
     game = Geister2()
     tdagent = TDAgent(game, seed)
     rndagent = RandomAgent(game, seed)
     env = VsEnv(rndagent, game, seed)
     tdagent.learn(env, seed)
-    for j in range(3):
-        for i in range(7):
-            print((tdagent.w[i*6+j*(6*6+6):i*6+6+j*(6*6+6)]*1000)
-                  .round()*(1/1000))
+    for k in range(6*7*3):
+        for i in range(3):
+            for j in range(7):
+                print((tdagent.w[j+i*(6*7)+k*(6*7*3):6+j+i*(6*7)+k*(6*7*3)]
+                      * 1000).round()*(1/1000))
+            print("-----------")
         print("-------------------")
+    np.save('td_4', tdagent.w)
+    w_td = np.load('td_4.npy')
+    print(w_td)
 
 
 class TDAgent(IAgent):
@@ -34,7 +39,7 @@ class TDAgent(IAgent):
         results_y = []
         # wを小さな正規乱数で初期化
         np.random.seed(seed)
-        self.w = w = np.random.randn(S_SIZE)*alpha*2
+        self.w = w = np.random.randn(S_SIZE**2)*alpha*2 + alpha*2
 
         for episode in range(10000):
             afterstates = env.on_episode_begin(self.init_red())
@@ -51,10 +56,11 @@ class TDAgent(IAgent):
                 w = w + alpha*(nq - q)*x[a]
                 x = nx
                 a = na
-            episodes_x.append(episode)
-            results_y.append(r)
             q = np.dot(x[a], w)
             w = w + alpha*(r - q)*x[a]
+
+            episodes_x.append(episode)
+            results_y.append(r)
             if (episode+1) % plt_intvl == 0:
                 x_list = plt_intvl*np.arange((episode+1)/plt_intvl)
                 y_list = np.array(results_y)
@@ -97,11 +103,11 @@ class TDAgent(IAgent):
             state[0] + state[1] + state[2]
             for state in afterstates]
         x = np.array(states_1ht)
+        a_size = len(afterstates)
         # 二駒関係
-        # y = np.dot(x, x.reshape(-1,1))
-        # 三駒関係ならさらに追加
-        # z = np.dot(y, x.reshape(-1,1))
-        return x
+        y = np.array([np.dot(s.reshape(-1, 1), s.reshape(1, -1)) for s in x]) \
+            .reshape(a_size, -1)
+        return y
 
     def get_act_afterstates(self, states):
         assert(self.w.shape[0] != 0)
