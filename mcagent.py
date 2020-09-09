@@ -8,20 +8,20 @@ from random_agent import RandomAgent
 
 
 def learn():
-    file_name = "td_8"
+    file_name = "td_9"
     seed = 91
     game = Geister2()
     mcagent = MCAgent(game, seed)
     opponent = RandomAgent(game, seed+1)
     env = VsEnv(opponent, game, seed)
     mcagent.learn(env, seed)
-    for k in range(6*7*3):
-        for i in range(3):
-            for j in range(7):
-                print((mcagent.w[j+i*(6*7)+k*(6*7*3):6+j+i*(6*7)+k*(6*7*3)]
-                      * 1000).round()*(1/1000))
-            print("-----------")
-        print("-------------------")
+    # for k in range(6*7*3):
+    #     for i in range(3):
+    #         for j in range(7):
+    #             print((mcagent.w[j+i*(6*7)+k*(6*7*3):6+j+i*(6*7)+k*(6*7*3)]
+    #                   * 1000).round()*(1/1000))
+    #         print("-----------")
+    #     print("-------------------")
     np.save(file_name, mcagent.w)
     w_td = np.load(file_name+'.npy')
     print(w_td.shape)
@@ -30,10 +30,9 @@ def learn():
 class MCAgent(IAgent):
     def learn(self, env, seed=1):
         alpha = self.alpha
-        epsilon = self.epsilon
-        rnd = self._rnd
-        S_SIZE = env.S_SIZE
-        self.S_SIZE = S_SIZE
+        # epsilon = self.epsilon
+        # rnd = self._rnd
+        assert(env.S_SIZE == self.S_SIZE)
 
         plt_intvl = 100
         episodes_x = []
@@ -43,7 +42,7 @@ class MCAgent(IAgent):
         # wを小さな正規乱数で初期化
         np.random.seed(seed)
         w = self.w
-        self.w = w = np.random.randn(S_SIZE**2)*alpha*2 + alpha*2
+        self.w = w = np.random.randn(self.W_SIZE)*alpha*2 + alpha*2
 
         for episode in range(10000):
             afterstates = env.on_episode_begin(self.init_red())
@@ -99,7 +98,7 @@ class MCAgent(IAgent):
             act_i = self._rnd.randrange(a_size)
         return act_i
 
-    # random
+    # epsilon-greedy using weights with no learning.
     def init_red(self):
         arr_string = ["A", "B", "C", "D", "E", "F", "G", "H"]
         if self.init_epsilon < self._rnd.random():  # P(1-epsilon): greedy
@@ -129,13 +128,20 @@ class MCAgent(IAgent):
 
     def get_x(self, afterstates):
         states_1ht = [
-            state[0] + state[1] + state[2]
+            state[0] + state[1] + state[2] + [1]
             for state in afterstates]
-        x = np.array(states_1ht)
         a_size = len(afterstates)
-        # 二駒関係
-        y = np.array([np.dot(s.reshape(-1, 1), s.reshape(1, -1)) for s in x]) \
-            .reshape(a_size, -1)
+        x = np.array(states_1ht).reshape(a_size, -1)
+        # # 二駒関係
+        # y = np.array([np.dot(s.reshape(-1, 1), s.reshape(1, -1)) for s in x])
+        #     .reshape(a_size, -1)
+        # 二駒関係v2
+        s_size = self.S_SIZE + 1  # 通常サイズ+バイアス項
+        y = np.zeros((s_size*(s_size+1)//2)*a_size).reshape(a_size, -1)
+        for i in range(s_size):
+            y[:, (i*(i+1)//2):((i+1)*(i+2)//2)] = \
+                x[:, i].reshape(a_size, -1)*x[:, 0:i+1]
+        y[:, -1] = 10  # バイアス項(学習率を高くするかわりに大きな値を入れる)
         return y
 
     def get_act_afterstates(self, states):
@@ -148,12 +154,13 @@ class MCAgent(IAgent):
         self._game = game
         self._rnd = random.Random(seed)
 
-        self.epsilon = 0.3
+        self.epsilon = 0.1
         self.init_epsilon = 0.3
         self.alpha = 0.001
         self.S_SIZE = (6*6+6)*3
+        self.W_SIZE = ((self.S_SIZE+1)*(self.S_SIZE+2))//2
 
-        self.w = "midainyuu"
+        self.w = None
 
 
 def test():
