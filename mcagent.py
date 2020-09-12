@@ -28,7 +28,7 @@ def learn():
 
 
 class MCAgent(IAgent):
-    def learn(self, env, seed=1):
+    def learn(self, env, seed=1, weight=None):
         alpha = self.alpha
         # epsilon = self.epsilon
         # rnd = self._rnd
@@ -41,8 +41,9 @@ class MCAgent(IAgent):
         # mcagent.w = np.load("td_4.npy")
         # wを小さな正規乱数で初期化
         np.random.seed(seed)
+        if weight is None:
+            self.w = np.random.randn(self.W_SIZE)*alpha*2 + alpha*2
         w = self.w
-        self.w = w = np.random.randn(self.W_SIZE)*alpha*2 + alpha*2
 
         for episode in range(10000):
             afterstates = env.on_episode_begin(self.init_red())
@@ -88,6 +89,7 @@ class MCAgent(IAgent):
         means = y_list.mean(axis=1)
         plt.plot(x_list, means)
 
+    # epsilon-greedy
     def get_act(self, w, x):
         assert(len(w) != 0)
         act_i = 0
@@ -98,7 +100,7 @@ class MCAgent(IAgent):
             act_i = self._rnd.randrange(a_size)
         return act_i
 
-    # epsilon-greedy using weights with no learning.
+    # epsilon-greedy using learned weights with no learning.
     def init_red(self):
         arr_string = ["A", "B", "C", "D", "E", "F", "G", "H"]
         if self.init_epsilon < self._rnd.random():  # P(1-epsilon): greedy
@@ -131,16 +133,16 @@ class MCAgent(IAgent):
             state[0] + state[1] + state[2] + [1]
             for state in afterstates]
         a_size = len(afterstates)
-        x = np.array(states_1ht).reshape(a_size, -1)
+        s_size = self.S_SIZE + 1  # 通常サイズ+バイアス項
+        x = np.array(states_1ht).reshape(a_size, s_size)
         # # 二駒関係
         # y = np.array([np.dot(s.reshape(-1, 1), s.reshape(1, -1)) for s in x])
         #     .reshape(a_size, -1)
         # 二駒関係v2
-        s_size = self.S_SIZE + 1  # 通常サイズ+バイアス項
-        y = np.zeros((s_size*(s_size+1)//2)*a_size).reshape(a_size, -1)
+        y = np.zeros((a_size, (s_size*(s_size+1)//2)))
         for i in range(s_size):
             y[:, (i*(i+1)//2):((i+1)*(i+2)//2)] = \
-                x[:, i].reshape(a_size, -1)*x[:, 0:i+1]
+                x[:, i:i+1]*x[:, 0:i+1]
         y[:, -1] = 10  # バイアス項(学習率を高くするかわりに大きな値を入れる)
         return y
 
