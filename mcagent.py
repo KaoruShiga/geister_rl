@@ -92,6 +92,9 @@ class MCAgent(IAgent):
     # epsilon-greedy
     def get_act(self, w, x):
         assert(len(w) != 0)
+        global dst_list, dst_list_opp
+        ext_dsts_b = state[0][:6*6]*dst_list
+
         act_i = 0
         a_size = x.shape[0]
         if self.epsilon < self._rnd.random():  # P(1-epsilon): greedy
@@ -128,19 +131,36 @@ class MCAgent(IAgent):
     def get_a_size(self, afterstates):
         return len(afterstates)
 
+    # ext_lvl = [
+    #     8, 7, 6, 6, 7, 8,
+    #     7, 6, 5, 5, 6, 7,
+    #     6, 5, 4, 4, 5, 6,
+    #     5, 4, 3, 3, 4, 5,
+    #     4, 3, 2, 2, 3, 4,
+    #     3, 2, 1, 1, 2, 3
+    # ]
+    # dst_list_opp = [
+    #     3, 2, 1, 1, 2, 3,
+    #     4, 3, 2, 2, 3, 4,
+    #     5, 4, 3, 3, 4, 5,
+    #     6, 5, 4, 4, 5, 6,
+    #     7, 6, 5, 5, 6, 7,
+    #     8, 7, 6, 6, 7, 8
+    # ]
+
     def get_x(self, afterstates):
         states_1ht = [
             state[0] + state[1] + state[2] + [1]
             for state in afterstates]
         a_size = len(afterstates)
-        s_size = self.S_SIZE + 1  # 通常サイズ+バイアス項
-        x = np.array(states_1ht).reshape(a_size, s_size)
+        s1_size = self.S_SIZE + 1  # 通常サイズ+バイアス項
+        x = np.array(states_1ht).reshape(a_size, s1_size)
         # # 二駒関係
         # y = np.array([np.dot(s.reshape(-1, 1), s.reshape(1, -1)) for s in x])
         #     .reshape(a_size, -1)
         # 二駒関係v2
-        y = np.zeros((a_size, (s_size*(s_size+1)//2)))
-        for i in range(s_size):
+        y = np.zeros((a_size, (s1_size*(s1_size+1)//2)))
+        for i in range(s1_size):
             y[:, (i*(i+1)//2):((i+1)*(i+2)//2)] = \
                 x[:, i:i+1]*x[:, 0:i+1]
         y[:, -1] = 10  # バイアス項(学習率を高くするかわりに大きな値を入れる)
