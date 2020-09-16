@@ -166,8 +166,6 @@ class Geister2(Geister):
     def is_ended(self):
         return self.checkResult() != 0
 
-    # def
-
     def print_states(self, states):
         for state in states:
             pre = [0 for _ in range(6*7)]

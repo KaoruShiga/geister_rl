@@ -6,12 +6,12 @@ from env_short_corridor import EnvShortCorridor
 class REINFORCEBL:
     def get_action(self):
         xs = np.array([[1, 0], [0, 1]])
-        hs = np.dot(self.theta, xs)
+        hs = xs.dot(self.theta)
         hs -= hs.max()  # for prevention of overflow
         exps = np.exp(hs)
         sum = exps.sum()
         pis = exps/sum
-        a = np.random.choice(2, 1, p=pis)
+        a = np.random.choice(2, p=pis)
         return a
 
     def __init__(self, alpha_t=0.001953125, alpha_w=0.015625):
@@ -31,7 +31,7 @@ def main():
         j_list = []
         for i in range(100):
             agent = agents[i]
-            g_list = []
+            r_list = []
             x_list = []
             g = 0.0
             env.on_episode_begin()
@@ -42,19 +42,21 @@ def main():
                 x_list.append(x)
                 r = env.on_action_received(a)
                 g += r
-                g_list.append(g)
+                r_list.append(r)
                 t += 1
             j_list.append(g)
-            for x, g in zip(x_list, g_list):
+            for x, r in zip(x_list, r_list):
                 dlt = g - agent.w*1
                 agent.w += agent.alpha_w*dlt*1
-                hs = np.dot(agent.theta, xs)
+                hs = xs.dot(agent.theta)
                 hs -= hs.max()  # for prevention of overflow
                 exps = np.exp(hs)
                 sum = exps.sum()
                 pis = exps/sum
-                agent.theta += agent.alpha_t*dlt*(x - np.dot(xs, pis))
-        print(np.array(j_list).mean())
+                agent.theta += agent.alpha_t*dlt*(x - pis.dot(xs))
+                g -= r
+        if episode == 100:
+            print(np.array(j_list).mean())
     print(agent.theta)
     hs = np.dot(agent.theta, xs)
     exps = np.exp(hs)

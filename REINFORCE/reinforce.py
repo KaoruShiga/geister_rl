@@ -29,7 +29,7 @@ if __name__ == "__main__":
         for i in range(100):
             agent = agents[i]
             x_list = []
-            g_list = []
+            r_list = []
             g = 0.0
             env.on_episode_begin()
             t = 0
@@ -39,17 +39,19 @@ if __name__ == "__main__":
                 x_list.append(x)
                 r = env.on_action_received(a)
                 g += r
-                g_list.append(g)
+                r_list.append(r)
                 t += 1
             j_list[i] = g
-            for x, g in zip(x_list, g_list):
+            for x, r in zip(x_list, r_list):
                 x = np.array(x)
                 hs = np.dot(agent.theta, xs)
                 exps = np.exp(hs)
                 sum = exps.sum()
                 pis = exps/sum
                 agent.theta += agent.alpha*g*(x - np.dot(xs, pis))
-        print(j_list.mean)
+                g -= r
+        if episode == 100:
+            print(np.array(j_list).mean())
     print(agent.theta)
     hs = np.dot(agent.theta, xs)
     exps = np.exp(hs)

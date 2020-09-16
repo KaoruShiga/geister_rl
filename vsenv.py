@@ -34,6 +34,9 @@ class VsEnv:
             return reward, _
         return reward, self._game.after_states()
 
+    def get_state(self):
+        return self._game.crr_state()
+
     # Resetting
     def on_episode_begin(self, init_red0):
         init_red1 = self._opponent.init_red()
@@ -43,6 +46,7 @@ class VsEnv:
         self._game.setRed(init_red1)
         self._game.changeSide()
         return self._game.after_states()
+
 
     def __init__(self, opponent, game=Geister2(), seed=0):
         self._opponent = opponent
