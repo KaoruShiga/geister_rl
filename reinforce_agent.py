@@ -98,10 +98,7 @@ class REINFORCEAgent(IAgent):
 
     def get_act(self, x, theta):
         assert(len(theta) != 0)
-        # global dst_list, dst_list_opp
-        # ext_dsts_b = state[0][:6*6]*dst_list
 
-        act_i = 0
         a_size = x.shape[0]
         hs = x.dot(theta)
         hs -= hs.max()  # for prevention of overflow
@@ -128,23 +125,6 @@ class REINFORCEAgent(IAgent):
 
     def get_a_size(self, afterstates):
         return len(afterstates)
-
-    # ext_lvl = [
-    #     8, 7, 6, 6, 7, 8,
-    #     7, 6, 5, 5, 6, 7,
-    #     6, 5, 4, 4, 5, 6,
-    #     5, 4, 3, 3, 4, 5,
-    #     4, 3, 2, 2, 3, 4,
-    #     3, 2, 1, 1, 2, 3
-    # ]
-    # dst_list_opp = [
-    #     3, 2, 1, 1, 2, 3,
-    #     4, 3, 2, 2, 3, 4,
-    #     5, 4, 3, 3, 4, 5,
-    #     6, 5, 4, 4, 5, 6,
-    #     7, 6, 5, 5, 6, 7,
-    #     8, 7, 6, 6, 7, 8
-    # ]
 
     def get_x(self, afterstates):
         states_1ht = [
@@ -175,7 +155,7 @@ class REINFORCEAgent(IAgent):
         self._rnd = random.Random(seed)
         np.random.seed(seed)
 
-        self.alpha = 0.003
+        self.alpha = None
         self.beta = 0.0003
 
         self.S_SIZE = (6*6+6)*3

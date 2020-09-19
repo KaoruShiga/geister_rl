@@ -1,0 +1,124 @@
+import random
+import numpy as np
+import matplotlib.pyplot as plt
+from geister2 import Geister2
+from vsenv import VsEnv
+from reinforce_agent import REINFORCEAgent
+from random_agent import RandomAgent
+
+
+def cluster_learn():
+    seed = 43
+    file_name = "weights_10/reinforce_"
+    agents_len = 9
+    max_episodes = 500*(agents_len)
+    plt_intvl = 10*(agents_len)
+    plt_bttl = 100
+    linestyles = ['-', '--', '-.']  # alphaに相当
+    plt_colors = ['r', 'g', 'b']  # betaに相当
+    alphas = [0.001, 0.003, 0.005]
+    betas = [0.0001, 0.0003, 0.0005]
+    assert(len(linestyles) == len(alphas))
+    assert(len(plt_colors) == len(betas))
+    assert(len(alphas)*len(betas) == agents_len)
+
+    game = Geister2()
+    np.random.seed(seed)
+    rnd = random.Random(seed)
+    agents = [REINFORCEAgent(game, seed+i) for i in range(agents_len)]
+    for i in range(len(alphas)):
+        for j in range(len(betas)):
+            agents[i+j*len(alphas)].alpha = alphas[i]
+            agents[i+j*len(alphas)].beta = betas[j]
+    # 重みを小さな正規乱数で初期化
+    for agent in agents:
+        if agent.w is None:
+            agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.1
+        if agent.theta is None:
+            agent.theta = np.random.randn(agent.T_SIZE)*agent.beta*0.1
+
+    episodes_x = []
+    results_y = [[] for _ in range(agents_len)]
+    rnd_agent = RandomAgent(game, seed*2+1)
+    env = VsEnv(agents[0], game, seed)
+    for episode in range(max_episodes):
+        # ランダムに学習個体を選び，その相手はすべての候補に対して行う(順番はランダム)
+        # for i in rnd.sample(range(agents_len), agents_len):  # -> [2, 1, 0]など
+        i = rnd.randrange(agents_len)
+        for j in rnd.sample(range(agents_len), agents_len):
+            # j = rnd.randrange(agents_len)
+            agent = agents[i]
+            env._opponent = agents[j]
+            w = agent.w
+            theta = agent.theta
+            alpha = agent.alpha
+            beta = agent.beta
+            afterstates = env.on_episode_begin(agent.init_red())
+            xs = agent.get_x([env.get_state()])[0]
+            x = agent.get_x(afterstates)
+            a = agent.get_act(x, theta)
+            xs_list = [xs]
+            x_list = [x]
+            xa_list = [x[a]]
+            for t in range(300):
+                r, nafterstates = env.on_action_number_received(a)
+                if r != 0:
+                    break
+                nxs = agent.get_x([env.get_state()])[0]
+                nx = agent.get_x(nafterstates)
+                na = agent.get_act(nx, theta)
+                xs_list.append(nxs)
+                x_list.append(nx)
+                xa_list.append(nx[na])
+                x = nx
+                a = na
+            for xa, x, xs in zip(xa_list, x_list, xs_list):
+                dlt = r - w.dot(xs)  # 報酬予測は事後状態を用いてはならない
+                w += beta*dlt*xa
+                hs = x.dot(theta)
+                hs -= hs.max()  # overflow回避のため
+                exps = np.exp(hs)
+                pis = exps/exps.sum()
+                theta += alpha*r*(xa - pis.dot(x))
+        # 定期的にランダムとの対戦結果を描画
+        if (episode+1) % plt_intvl == 0:
+            episodes_x.append(episode)
+            plt.clf()
+            opponent = rnd_agent
+            env._opponent = opponent
+            for i in range(agents_len):
+                agent = agents[i]
+                r_list = np.zeros(plt_bttl)
+                for bttl_i in range(plt_bttl):
+                    afterstates = env.on_episode_begin(agent.init_red())
+                    x = agent.get_x(afterstates)
+                    a = agent.get_act(x, agent.theta)
+                    for t in range(300):
+                        r, nafterstates = env.on_action_number_received(a)
+                        if r != 0:
+                            break
+                        nx = agent.get_x(nafterstates)
+                        na = agent.get_act(nx, agent.theta)
+                        x = nx
+                        a = na
+                    r_list[bttl_i] = r
+                results_y[i].append(r_list.mean())
+                plt.figure(1)
+                plt.title('Training...')
+                plt.xlabel('Episode')
+                plt.ylabel('Mean Results')
+                x_list = np.array(episodes_x)
+                y_list = np.array(results_y[i])
+                plt.plot(x_list, y_list,
+                         linestyle=linestyles[i % len(alphas)],
+                         c=plt_colors[i//len(alphas)],
+                         label=str(i))
+            plt.pause(0.01)  # pause a bit so that plots are updated
+    plt.show()
+    for i in range(agents_len):
+        np.save(file_name+str(i+1)+"_w", agents[i].w)
+        np.save(file_name+str(i+1)+"_theta", agents[i].theta)
+
+
+if __name__ == "__main__":
+    cluster_learn()
