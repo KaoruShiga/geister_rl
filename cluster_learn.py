@@ -8,15 +8,17 @@ from random_agent import RandomAgent
 
 
 def cluster_learn():
-    seed = 43
-    file_name = "weights_10/reinforce_"
+    seed = 131
+    file_name = "weights_15/reinforce_"
     agents_len = 9
     max_episodes = 500*(agents_len)
-    plt_intvl = 10*(agents_len)
-    plt_bttl = 100
-    linestyles = ['-', '--', '-.']  # alphaに相当
+    plt_intvl = 50*(agents_len)
+    plt_bttl = 200
+    linestyles = [':', '--', '-.']  # alphaに相当
     plt_colors = ['r', 'g', 'b']  # betaに相当
-    alphas = [0.001, 0.003, 0.005]
+    linestyle_avg = '-'
+    plt_color_avg = 'k'
+    alphas = [0.003, 0.005, 0.008]
     betas = [0.0001, 0.0003, 0.0005]
     assert(len(linestyles) == len(alphas))
     assert(len(plt_colors) == len(betas))
@@ -39,6 +41,7 @@ def cluster_learn():
 
     episodes_x = []
     results_y = [[] for _ in range(agents_len)]
+    avg_y = []
     rnd_agent = RandomAgent(game, seed*2+1)
     env = VsEnv(agents[0], game, seed)
     for episode in range(max_episodes):
@@ -86,23 +89,27 @@ def cluster_learn():
             plt.clf()
             opponent = rnd_agent
             env._opponent = opponent
+            avgs = []
             for i in range(agents_len):
                 agent = agents[i]
+                theta = agent.theta
                 r_list = np.zeros(plt_bttl)
                 for bttl_i in range(plt_bttl):
                     afterstates = env.on_episode_begin(agent.init_red())
                     x = agent.get_x(afterstates)
-                    a = agent.get_act(x, agent.theta)
+                    a = agent.get_act(x, theta)
                     for t in range(300):
                         r, nafterstates = env.on_action_number_received(a)
                         if r != 0:
                             break
                         nx = agent.get_x(nafterstates)
-                        na = agent.get_act(nx, agent.theta)
+                        na = agent.get_act(nx, theta)
                         x = nx
                         a = na
                     r_list[bttl_i] = r
-                results_y[i].append(r_list.mean())
+                mean = r_list.mean()
+                avgs.append(mean)
+                results_y[i].append(mean)
                 plt.figure(1)
                 plt.title('Training...')
                 plt.xlabel('Episode')
@@ -111,8 +118,19 @@ def cluster_learn():
                 y_list = np.array(results_y[i])
                 plt.plot(x_list, y_list,
                          linestyle=linestyles[i % len(alphas)],
-                         c=plt_colors[i//len(alphas)],
+                         c=plt_colors[i // len(alphas)],
                          label=str(i))
+            avg_y.append(np.array(avgs).mean())
+            plt.figure(1)
+            plt.title('Training...')
+            plt.xlabel('Episode')
+            plt.ylabel('Mean Results')
+            x_list = np.array(episodes_x)
+            y_list = np.array(avg_y)
+            plt.plot(x_list, y_list,
+                     linestyle=linestyle_avg,
+                     c=plt_color_avg,
+                     label=agents_len)
             plt.pause(0.01)  # pause a bit so that plots are updated
     plt.show()
     for i in range(agents_len):

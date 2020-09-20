@@ -9,40 +9,41 @@ class VsEnv:
     """指定した固定相手と対戦する環境"""
     """現在は学習Agentが先手turn=0で固定"""
 
-    # 試合が終了したか否か(青脱出可でもfalse)
+    # 勝敗が確定したか否か(青脱出可でもtrue)
     def is_ended(self):
-        return self._game.is_ended()
+        return self.get_reward(self._game.checkResult()) != 0
 
     # 確定された勝敗(青脱出可なら 1)
     def get_reward(self, result):
-        ext_lvl = np.array([
-            8, 7, 6, 6, 7, 8,
-            7, 6, 5, 5, 6, 7,
-            6, 5, 4, 4, 5, 6,
-            5, 4, 3, 3, 4, 5,
-            4, 3, 2, 2, 3, 4,
-            3, 2, 1, 1, 2, 3
-        ])
-        ext_opp_lvl = np.array([
-            3, 2, 1, 1, 2, 3,
-            4, 3, 2, 2, 3, 4,
-            5, 4, 3, 3, 4, 5,
-            6, 5, 4, 4, 5, 6,
-            7, 6, 5, 5, 6, 7,
-            8, 7, 6, 6, 7, 8
-        ])
-        states = self._game.crr_state()
-        max_lvl = (np.array(states[0][0:6*6])*ext_lvl).max()
-        if(max_lvl >= (np.array(states[2][0:6*6])*ext_lvl).max()):
-            max_lvl_opp = (np.array(states[2][0:6*6])*ext_opp_lvl).max()
-            if(max_lvl >= max_lvl_opp):
-                return 1
         if result > 0:
             return 1
         elif result < 0:
             return -1
         else:
+            ext_lvl = np.array([
+                8, 7, 6, 6, 7, 8,
+                7, 6, 5, 5, 6, 7,
+                6, 5, 4, 4, 5, 6,
+                5, 4, 3, 3, 4, 5,
+                4, 3, 2, 2, 3, 4,
+                3, 2, 1, 1, 2, 3
+            ])
+            ext_opp_lvl = np.array([
+                3, 2, 1, 1, 2, 3,
+                4, 3, 2, 2, 3, 4,
+                5, 4, 3, 3, 4, 5,
+                6, 5, 4, 4, 5, 6,
+                7, 6, 5, 5, 6, 7,
+                8, 7, 6, 6, 7, 8
+            ])
+            states = self._state
+            max_lvl = (np.array(states[0][0:6*6])*ext_lvl).max()
+            if(max_lvl > (np.array(states[2][0:6*6])*ext_lvl).max()):
+                max_lvl_opp = (np.array(states[2][0:6*6])*ext_opp_lvl).max()
+                if(max_lvl >= max_lvl_opp):
+                    return 1
             return 0
+
 
     def on_action_number_received(self, act_i):
         assert(not self._game.is_ended())
@@ -59,10 +60,11 @@ class VsEnv:
         reward = self.get_reward(self._game.checkResult())
         if reward != 0:
             return reward, _
+        self._state = self._game.crr_state()
         return reward, self._game.after_states()
 
     def get_state(self):
-        return self._game.crr_state()
+        return self._state
 
     # Resetting
     def on_episode_begin(self, init_red0):
@@ -72,6 +74,7 @@ class VsEnv:
         self._game.changeSide()
         self._game.setRed(init_red1)
         self._game.changeSide()
+        self._state = self._game.crr_state()
         return self._game.after_states()
 
     def __init__(self, opponent, game=Geister2(), seed=0):
@@ -85,14 +88,18 @@ class VsEnv:
 
 # debug for cmd(tmp)
 if __name__ == "__main__":
-    seed = 9
+    seed = 59
     game = Geister2()
     agent0 = RandomAgent(game, seed)
     agent1 = RandomAgent(game, seed)
     env = VsEnv(agent1, game, seed)
     arr0 = agent0.init_red()
     s = env.on_episode_begin(arr0)
-    while env.get_reward() == 0:
-        a = agent0.get_act_afterstates(s)
+    a = agent0.get_act_afterstates(s)
+    while not env.is_ended():
         r, s = env.on_action_number_received(a)
         env._game.printBoard()
+        if r != 0:
+            break
+        a = agent0.get_act_afterstates(s)
+

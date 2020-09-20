@@ -139,8 +139,7 @@ class REINFORCEAgent(IAgent):
         # 二駒関係v2
         y = np.zeros((a_size, (s1_size*(s1_size+1)//2)))
         for i in range(s1_size):
-            y[:, (i*(i+1)//2):((i+1)*(i+2)//2)] = \
-                x[:, i:i+1]*x[:, 0:i+1]
+            y[:, (i*(i+1)//2):((i+1)*(i+2)//2)] = x[:, i:i+1]*x[:, 0:i+1]
         y[:, -1] = 1  # バイアス項
         return y
 
