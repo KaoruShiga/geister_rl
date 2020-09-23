@@ -94,6 +94,8 @@ class Geister2(Geister):
         for i in range(len(side_list)):
             side_num = side_list[i]
             if side_num > 0:
+                if side_num > 3:
+                    self.print_states(crr_state)
                 crr_state[side_num-1][6*6 + i] = 1
         return crr_state
 

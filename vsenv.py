@@ -20,13 +20,21 @@ class VsEnv:
         elif result < 0:
             return -1
         else:
-            ext_lvl = np.array([
-                8, 7, 6, 6, 7, 8,
-                7, 6, 5, 5, 6, 7,
-                6, 5, 4, 4, 5, 6,
-                5, 4, 3, 3, 4, 5,
-                4, 3, 2, 2, 3, 4,
-                3, 2, 1, 1, 2, 3
+            ext_lvl_r = np.array([
+                4, 5, 6, 7, 8, 9,
+                3, 4, 5, 6, 7, 8,
+                2, 3, 4, 5, 6, 7,
+                1, 2, 3, 4, 5, 6,
+                0, 1, 2, 3, 4, 5,
+                0, 0, 1, 2, 3, 4,
+            ])
+            ext_lvl_l = np.array([
+                9, 8, 7, 6, 5, 4,
+                8, 7, 6, 5, 4, 3,
+                7, 6, 5, 4, 3, 2,
+                6, 5, 4, 3, 2, 1,
+                5, 4, 3, 2, 1, 0,
+                4, 3, 2, 1, 0, 0,
             ])
             ext_opp_lvl = np.array([
                 3, 2, 1, 1, 2, 3,
@@ -37,8 +45,13 @@ class VsEnv:
                 8, 7, 6, 6, 7, 8
             ])
             states = self._state
-            max_lvl = (np.array(states[0][0:6*6])*ext_lvl).max()
-            if(max_lvl > (np.array(states[2][0:6*6])*ext_lvl).max()):
+            max_lvl = (np.array(states[0][0:6*6])*ext_lvl_r).max()
+            if(max_lvl > (np.array(states[2][0:6*6])*ext_lvl_r).max()):
+                max_lvl_opp = (np.array(states[2][0:6*6])*ext_opp_lvl).max()
+                if(max_lvl >= max_lvl_opp):
+                    return 1
+            max_lvl = (np.array(states[0][0:6*6])*ext_lvl_l).max()
+            if(max_lvl > (np.array(states[2][0:6*6])*ext_lvl_l).max()):
                 max_lvl_opp = (np.array(states[2][0:6*6])*ext_opp_lvl).max()
                 if(max_lvl >= max_lvl_opp):
                     return 1
@@ -102,4 +115,3 @@ if __name__ == "__main__":
         if r != 0:
             break
         a = agent0.get_act_afterstates(s)
-

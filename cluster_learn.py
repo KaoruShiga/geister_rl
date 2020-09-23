@@ -8,8 +8,8 @@ from random_agent import RandomAgent
 
 
 def cluster_learn():
-    seed = 131
-    file_name = "weights_15/reinforce_"
+    seed = 119
+    file_name = "weights/weights_13/reinforce_"
     agents_len = 9
     max_episodes = 500*(agents_len)
     plt_intvl = 50*(agents_len)
@@ -46,10 +46,10 @@ def cluster_learn():
     env = VsEnv(agents[0], game, seed)
     for episode in range(max_episodes):
         # ランダムに学習個体を選び，その相手はすべての候補に対して行う(順番はランダム)
-        # for i in rnd.sample(range(agents_len), agents_len):  # -> [2, 1, 0]など
-        i = rnd.randrange(agents_len)
-        for j in rnd.sample(range(agents_len), agents_len):
-            # j = rnd.randrange(agents_len)
+        for i in rnd.sample(range(agents_len), agents_len):  # -> [2, 1, 0]など
+        # i = rnd.randrange(agents_len)
+        # for j in rnd.sample(range(agents_len), agents_len):
+            j = rnd.randrange(agents_len)
             agent = agents[i]
             env._opponent = agents[j]
             w = agent.w

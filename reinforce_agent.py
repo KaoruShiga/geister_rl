@@ -149,7 +149,7 @@ class REINFORCEAgent(IAgent):
         i_act = self.get_act(x, self.theta)
         return i_act
 
-    def __init__(self, game, seed=0):
+    def __init__(self, game, seed=None):
         self._game = game
         self._rnd = random.Random(seed)
         np.random.seed(seed)
