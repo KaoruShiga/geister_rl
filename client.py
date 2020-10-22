@@ -6,8 +6,8 @@ import argparse
 import tcpClient
 
 
-def run(player, port):
-    cl = tcpClient.Client("localhost", port)
+def run(player, port, host="localhost"):
+    cl = tcpClient.Client(host, port)
 
     red = "SET:" + str(player.init_red()) + "\r\n"
     print(red)

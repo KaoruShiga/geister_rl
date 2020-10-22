@@ -8,8 +8,8 @@ from random_agent import RandomAgent
 
 
 def cluster_learn():
-    seed = 119
-    file_name = "weights/weights_13/reinforce_"
+    seed = 120
+    file_name = "weights/weights_14/reinforce_"
     agents_len = 9
     max_episodes = 500*(agents_len)
     plt_intvl = 50*(agents_len)
@@ -18,8 +18,8 @@ def cluster_learn():
     plt_colors = ['r', 'g', 'b']  # betaに相当
     linestyle_avg = '-'
     plt_color_avg = 'k'
-    alphas = [0.003, 0.005, 0.008]
-    betas = [0.0001, 0.0003, 0.0005]
+    alphas = [0.003, 0.005, 0.01]
+    betas = [0.0001, 0.0003, 0.001]
     assert(len(linestyles) == len(alphas))
     assert(len(plt_colors) == len(betas))
     assert(len(alphas)*len(betas) == agents_len)
@@ -47,42 +47,12 @@ def cluster_learn():
     for episode in range(max_episodes):
         # ランダムに学習個体を選び，その相手はすべての候補に対して行う(順番はランダム)
         for i in rnd.sample(range(agents_len), agents_len):  # -> [2, 1, 0]など
-        # i = rnd.randrange(agents_len)
-        # for j in rnd.sample(range(agents_len), agents_len):
+            # i = rnd.randrange(agents_len)
+            # for j in rnd.sample(range(agents_len), agents_len):
             j = rnd.randrange(agents_len)
             agent = agents[i]
             env._opponent = agents[j]
-            w = agent.w
-            theta = agent.theta
-            alpha = agent.alpha
-            beta = agent.beta
-            afterstates = env.on_episode_begin(agent.init_red())
-            xs = agent.get_x([env.get_state()])[0]
-            x = agent.get_x(afterstates)
-            a = agent.get_act(x, theta)
-            xs_list = [xs]
-            x_list = [x]
-            xa_list = [x[a]]
-            for t in range(300):
-                r, nafterstates = env.on_action_number_received(a)
-                if r != 0:
-                    break
-                nxs = agent.get_x([env.get_state()])[0]
-                nx = agent.get_x(nafterstates)
-                na = agent.get_act(nx, theta)
-                xs_list.append(nxs)
-                x_list.append(nx)
-                xa_list.append(nx[na])
-                x = nx
-                a = na
-            for xa, x, xs in zip(xa_list, x_list, xs_list):
-                dlt = r - w.dot(xs)  # 報酬予測は事後状態を用いてはならない
-                w += beta*dlt*xa
-                hs = x.dot(theta)
-                hs -= hs.max()  # overflow回避のため
-                exps = np.exp(hs)
-                pis = exps/exps.sum()
-                theta += alpha*r*(xa - pis.dot(x))
+            agent.learn(env, max_episodes=1)
         # 定期的にランダムとの対戦結果を描画
         if (episode+1) % plt_intvl == 0:
             episodes_x.append(episode)

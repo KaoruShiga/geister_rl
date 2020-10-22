@@ -7,8 +7,9 @@ class Geister2(Geister):
     def __init__(self, info=None):
         self._turn = 0
         if info is None:
-            return super().__init__()
-        return super().__init__(info)
+            super().__init__()
+        else:
+            super().__init__(info)
 
     # raise error. and change direct: d=0:'E', d=1:'S', d=2:'W', d=3:'N'
     def move(self, i, direct):
@@ -34,7 +35,6 @@ class Geister2(Geister):
         self.units[targetIndex].x, self.units[targetIndex].y = x, y
         if x == -1 or x == 6:
             self.units[targetIndex].x, self.units[targetIndex].y = 8, 8
-            return
 
     # d: 0->3, 1->0, 2->2, 3->1
     # so, d=0:'E', d=1:'S', d=2:'W', d=3:'N'
@@ -64,9 +64,9 @@ class Geister2(Geister):
         moves = self.legalMoves()
         move = moves[index]
         i, dir = move
-        return self.move(i, dir)
+        self.move(i, dir)
 
-    "side_list[0, 1] is the number of taken blue,red owned by the oppenet"
+    "side_list[0, 1] is the number of taken blue,red owned by the opponent"
     "side_list[2, 3] is the number of taken blue,red owned by the observer"
     "side_list[4, 5] is take_flg,exit_flg"
     def crr_state(self):
@@ -95,7 +95,7 @@ class Geister2(Geister):
             side_num = side_list[i]
             if side_num > 0:
                 if side_num > 3:
-                    self.print_states(crr_state)
+                    print("side_list's element is over 4, side_list=", side_list)
                 crr_state[side_num-1][6*6 + i] = 1
         return crr_state
 

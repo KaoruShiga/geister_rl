@@ -4,59 +4,58 @@ from random_agent import RandomAgent
 from geister2 import Geister2
 
 
-
 class VsEnv:
     """指定した固定相手と対戦する環境"""
     """現在は学習Agentが先手turn=0で固定"""
 
-    # 勝敗が確定したか否か(青脱出可でもtrue)
+    # 勝敗が判明したか否か(青脱出可でもfalse)
     def is_ended(self):
         return self.get_reward(self._game.checkResult()) != 0
 
-    # 確定された勝敗(青脱出可なら 1)
+    # 確定された勝敗(青脱出可なら必ず 1)
     def get_reward(self, result):
         if result > 0:
             return 1
         elif result < 0:
             return -1
         else:
-            ext_lvl_r = np.array([
-                4, 5, 6, 7, 8, 9,
-                3, 4, 5, 6, 7, 8,
-                2, 3, 4, 5, 6, 7,
-                1, 2, 3, 4, 5, 6,
-                0, 1, 2, 3, 4, 5,
-                0, 0, 1, 2, 3, 4,
-            ])
-            ext_lvl_l = np.array([
-                9, 8, 7, 6, 5, 4,
-                8, 7, 6, 5, 4, 3,
-                7, 6, 5, 4, 3, 2,
-                6, 5, 4, 3, 2, 1,
-                5, 4, 3, 2, 1, 0,
-                4, 3, 2, 1, 0, 0,
-            ])
-            ext_opp_lvl = np.array([
-                3, 2, 1, 1, 2, 3,
-                4, 3, 2, 2, 3, 4,
-                5, 4, 3, 3, 4, 5,
-                6, 5, 4, 4, 5, 6,
-                7, 6, 5, 5, 6, 7,
-                8, 7, 6, 6, 7, 8
-            ])
-            states = self._state
-            max_lvl = (np.array(states[0][0:6*6])*ext_lvl_r).max()
-            if(max_lvl > (np.array(states[2][0:6*6])*ext_lvl_r).max()):
-                max_lvl_opp = (np.array(states[2][0:6*6])*ext_opp_lvl).max()
-                if(max_lvl >= max_lvl_opp):
-                    return 1
-            max_lvl = (np.array(states[0][0:6*6])*ext_lvl_l).max()
-            if(max_lvl > (np.array(states[2][0:6*6])*ext_lvl_l).max()):
-                max_lvl_opp = (np.array(states[2][0:6*6])*ext_opp_lvl).max()
-                if(max_lvl >= max_lvl_opp):
-                    return 1
             return 0
-
+            # ext_lvl_r = np.array([
+            #     4, 5, 6, 7, 8, 9,
+            #     3, 4, 5, 6, 7, 8,
+            #     2, 3, 4, 5, 6, 7,
+            #     1, 2, 3, 4, 5, 6,
+            #     0, 1, 2, 3, 4, 5,
+            #     0, 0, 1, 2, 3, 4,
+            # ])
+            # ext_lvl_l = np.array([
+            #     9, 8, 7, 6, 5, 4,
+            #     8, 7, 6, 5, 4, 3,
+            #     7, 6, 5, 4, 3, 2,
+            #     6, 5, 4, 3, 2, 1,
+            #     5, 4, 3, 2, 1, 0,
+            #     4, 3, 2, 1, 0, 0,
+            # ])
+            # ext_opp_lvl = np.array([
+            #     3, 2, 1, 1, 2, 3,
+            #     4, 3, 2, 2, 3, 4,
+            #     5, 4, 3, 3, 4, 5,
+            #     6, 5, 4, 4, 5, 6,
+            #     7, 6, 5, 5, 6, 7,
+            #     8, 7, 6, 6, 7, 8
+            # ])
+            # states = self._state
+            # max_lvl = (np.array(states[0][0:6*6])*ext_lvl_r).max()
+            # if(max_lvl > (np.array(states[2][0:6*6])*ext_lvl_r).max()):
+            #     max_lvl_opp = (np.array(states[2][0:6*6])*ext_opp_lvl).max()
+            #     if(max_lvl >= max_lvl_opp):
+            #         return 1
+            # max_lvl = (np.array(states[0][0:6*6])*ext_lvl_l).max()
+            # if(max_lvl > (np.array(states[2][0:6*6])*ext_lvl_l).max()):
+            #     max_lvl_opp = (np.array(states[2][0:6*6])*ext_opp_lvl).max()
+            #     if(max_lvl >= max_lvl_opp):
+            #         return 1
+            # return 0
 
     def on_action_number_received(self, act_i):
         assert(not self._game.is_ended())

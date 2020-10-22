@@ -1,5 +1,6 @@
 import numpy as np
 import client
+import argparse
 from geister import Geister
 from geister2 import Geister2
 from random_agent import RandomAgent
@@ -51,14 +52,20 @@ class TCPPlayer():
         return "".join(self.agent.init_red())
 
 
-def tcp_connect(agent, game, port):
+def tcp_connect(agent, game, port, host="localhost"):
     player = TCPPlayer(agent=agent, game=game)
-    client.run(player, port)
+    client.run(player, port, host)
 
 
 if __name__ == "__main__":
-    file_name = "weights/weights_11/reinforce_2_theta.npy"
+    # parser = argparse.ArgumentParser(description='TCP接続するクライエント')    # 2. パーサを作る
+    # # 3. parser.add_argumentで受け取る引数を追加していく
+    # parser.add_argument('-p', '--port', type=int, default=10000)
+    # # 4. 引数を解析
+    # args = parser.parse_args()
+
+    file_name = "weights/weights_13/reinforce_5_theta.npy"
     game = Geister2()
     agent = REINFORCEAgent(game)
     agent.theta = np.load(file_name)
-    tcp_connect(agent=agent, game=game, port=10000)
+    tcp_connect(agent=agent, game=game, port=10001, host="itolab.asuscomm.com")

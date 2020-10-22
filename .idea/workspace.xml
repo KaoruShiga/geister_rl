@@ -2,194 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a1e951cb-bf72-4460-b218-21df62f824ee" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cluster_learn.py" beforeDir="false" afterPath="$PROJECT_DIR$/cluster_learn.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/geister2.py" beforeDir="false" afterPath="$PROJECT_DIR$/geister2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reinforce_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/reinforce_agent.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vsenv.py" beforeDir="false" afterPath="$PROJECT_DIR$/vsenv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_1_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_1_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_2_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_2_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_3_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_3_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_4_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_4_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_5_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_5_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_6_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_6_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_7_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_7_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_8_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_8_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_9_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_10/reinforce_9_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_1_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_1_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_2_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_2_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_3_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_3_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_4_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_4_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_5_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_5_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_6_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_6_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_7_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_7_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_8_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_8_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_9_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_11/reinforce_9_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_1_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_1_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_2_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_2_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_3_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_3_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_4_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_4_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_5_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_5_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_6_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_6_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_7_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_7_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_8_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_8_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_9_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_12/reinforce_9_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_1_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_1_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_2_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_2_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_3_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_3_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_4_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_4_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_5_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_5_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_6_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_13/reinforce_6_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_1_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_1_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_2_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_2_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_3_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_3_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_4_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_4_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_5_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_5_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_6_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_6_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_7_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_7_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_8_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_8_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_9_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_14/reinforce_9_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_1_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_1_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_2_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_2_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_3_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_3_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_4_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_4_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_5_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_5_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_6_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_6_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_7_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_7_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_8_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_8_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_9_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_15/reinforce_9_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_5/rf_1_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_5/rf_1_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_5/rf_2_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_5/rf_2_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_5/rf_3_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_5/rf_3_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_5/rf_6_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_5/rf_6_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_1_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_1_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_2_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_2_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_3_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_3_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_4_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_4_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_5_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_5_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_6_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_6_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_7_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_7_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_8_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_8_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_9_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_6/reinforce_9_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_1_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_1_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_2_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_2_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_3_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_3_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_4_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_4_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_5_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_5_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_6_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_6_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_7_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_7_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_8_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_8_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_9_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_7/reinforce_9_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_1_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_1_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_2_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_2_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_3_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_3_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_4_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_4_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_5_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_5_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_6_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_6_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_7_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_7_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_8_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_8_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_9_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_8/reinforce_9_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_1_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_1_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_2_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_2_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_3_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_3_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_4_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_4_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_5_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_5_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_6_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_6_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_7_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_7_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_8_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_8_w.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_9_theta.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/weights_9/reinforce_9_w.npy" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -202,8 +18,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/geister2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="91">
-              <caret line="99" column="24" lean-forward="true" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
+            <state relative-caret-position="192">
+              <caret line="69" column="75" lean-forward="true" selection-start-line="69" selection-start-column="75" selection-end-line="69" selection-end-column="75" />
             </state>
           </provider>
         </entry>
@@ -211,29 +27,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/geister.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="6" column="20" lean-forward="true" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tcp_player.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="137">
-              <caret line="27" column="39" lean-forward="true" selection-start-line="27" selection-start-column="39" selection-end-line="27" selection-end-column="39" />
+            <state relative-caret-position="190">
+              <caret line="9" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -241,8 +36,29 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vsenv.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="26" column="33" lean-forward="true" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
+            <state relative-caret-position="187">
+              <caret line="59" lean-forward="true" selection-start-line="59" selection-end-line="59" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/reinforce_agent.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1968">
+              <caret line="169" selection-start-line="169" selection-end-line="169" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cluster_learn.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="178">
+              <caret line="66" selection-start-line="66" selection-end-line="66" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -255,13 +71,14 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/reinforce_agent.py" />
         <option value="$PROJECT_DIR$/cluster_learn.py" />
         <option value="$PROJECT_DIR$/texts/cluster_learning_memo.txt" />
-        <option value="$PROJECT_DIR$/geister2.py" />
         <option value="$PROJECT_DIR$/client.py" />
         <option value="$PROJECT_DIR$/tcp_player.py" />
         <option value="$PROJECT_DIR$/vsenv.py" />
+        <option value="$PROJECT_DIR$/iagent.py" />
+        <option value="$PROJECT_DIR$/reinforce_agent.py" />
+        <option value="$PROJECT_DIR$/geister2.py" />
       </list>
     </option>
   </component>
@@ -335,7 +152,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.tcp_player">
+  <component name="RunManager" selected="Python.cluster_learn">
     <configuration name="cluster_learn" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="geister_v2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -399,10 +216,26 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in reinforce_agent.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="geister_v2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/reinforce_agent.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.tcp_player" />
         <item itemvalue="Python.cluster_learn" />
+        <item itemvalue="Python tests.pytest in reinforce_agent.py" />
+        <item itemvalue="Python.tcp_player" />
         <item itemvalue="Python.vsenv" />
       </list>
     </recent_temporary>
@@ -420,6 +253,14 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="pytest_in_reinforce_agent_py - 2020.09.27 at 20h 00m 08s.xml">
+      <configuration name="pytest in reinforce_agent.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_reinforce_agent_py - 2020.09.27 at 20h 00m 32s.xml">
+      <configuration name="pytest in reinforce_agent.py" configurationId="tests" />
+    </history-entry>
+  </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
@@ -428,9 +269,9 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49947312" weight="0.32936078" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49947312" weight="0.32936078" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.36836404" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.36078006" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -464,13 +305,13 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/geister2.py</url>
-          <line>97</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
+      <default-breakpoints>
+        <breakpoint suspend="NONE" type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
     </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
@@ -514,23 +355,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/reinforce_agent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3240">
-          <caret line="141" column="29" lean-forward="true" selection-start-line="141" selection-start-column="29" selection-end-line="141" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_learn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/texts/cluster_learning_memo.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
@@ -545,27 +369,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/geister2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="91">
-          <caret line="99" column="24" lean-forward="true" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/unit.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/geister.py">
+    <entry file="file://$PROJECT_DIR$/iagent.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="6" column="20" lean-forward="true" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="20" />
+        <state relative-caret-position="96">
+          <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tcp_player.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -575,14 +392,45 @@
     <entry file="file://$PROJECT_DIR$/client.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="137">
-          <caret line="27" column="39" lean-forward="true" selection-start-line="27" selection-start-column="39" selection-end-line="27" selection-end-column="39" />
+          <caret line="27" column="39" selection-start-line="27" selection-start-column="39" selection-end-line="27" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/geister.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cluster_learn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="66" selection-start-line="66" selection-end-line="66" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/geister2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="69" column="75" lean-forward="true" selection-start-line="69" selection-start-column="75" selection-end-line="69" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/reinforce_agent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1968">
+          <caret line="169" selection-start-line="169" selection-end-line="169" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/vsenv.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="26" column="33" lean-forward="true" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
+        <state relative-caret-position="187">
+          <caret line="59" lean-forward="true" selection-start-line="59" selection-end-line="59" />
         </state>
       </provider>
     </entry>
