@@ -42,16 +42,17 @@ class REINFORCEAgent(IAgent):
         #     self.theta = np.random.randn(self.T_SIZE)*beta*0.1
         w = self.w
         theta = self.theta
-
         for episode in range(max_episodes):
             afterstates = env.on_episode_begin(self.init_red())
             xs = self.get_x([env.get_state()])[0]
             x = self.get_x(afterstates)
             a = self.get_act(x, theta)
+
             xs_list = [xs]
             x_list = [x]
             xa_list = [x[a]]
-            for t in range(300):
+
+            for t in range(self.MAX_T):
                 r, nafterstates = env.on_action_number_received(a)
                 if r != 0:
                     break
@@ -61,59 +62,44 @@ class REINFORCEAgent(IAgent):
                 xs_list.append(nxs)
                 x_list.append(nx)
                 xa_list.append(nx[na])
+
                 x = nx
                 a = na
-            xa_arr, x_arr, xs_arr = np.array(xa_list), np.array(x_list), np.array(xs_list)
-            print(x_arr[0:1])
-            dlt = r - xs_arr.dot(w)
-            dlt_w1 = beta*(xa_arr.T.dot(dlt))
-            hs = x_arr.dot(theta)
-            hs -= hs.max().reshape(-1, 1)
-            exps = np.exp(hs)
-            pis = exps/exps.sum(1).reshape(-1, 1)
-            dlt_theta1 = alpha*r*(
-                xa_arr.sum(0) -
-                np.matmul(pis.reshape(len(pis), 1, -1), x_arr)
-                .reshape(len(pis), -1).sum(0))
-            dlt_w2 = dlt_theta2 = 0
             for xa, x, xs in zip(xa_list, x_list, xs_list):
                 dlt = r - w.dot(xs)  # 報酬予測は事後状態を用いてはならない
-                dlt_w2 += beta*dlt*xa
+                w += beta*dlt*xs
                 hs = x.dot(theta)
                 hs -= hs.max()  # overflow回避のため
                 exps = np.exp(hs)
                 pis = exps/exps.sum()
-                dlt_theta2 += alpha*r*(xa - pis.dot(x))
-            print(dlt_w1 - dlt_w2)
-            print(dlt_theta1 - dlt_theta2)
-            w += dlt_w2
-            theta += dlt_theta2
+                theta += alpha*r*(xa - pis.dot(x))
 
-        #     results_y.append(r)
-        #     if (episode+1) % plt_intvl == 0:
-        #         plt.figure(2)
-        #         plt.title('Training...')
-        #         plt.xlabel('Episode')
-        #         plt.ylabel('Mean Results of Interval')
-        #         episodes_x.append(episode)
-        #         x_list = np.array(episodes_x)
-        #         y_list = np.array(results_y)
-        #         y_list = y_list.reshape(-1, plt_intvl)
-        #         means = y_list.mean(axis=1)
-        #         plt.plot(x_list, means)
-        #         plt.pause(0.0001)  # pause a bit so that plots are updated
-        #         plt.clf()
-        #
-        # plt.figure(2)
-        # plt.title('Training...')
-        # plt.xlabel('Episode')
-        # plt.ylabel('Mean Results of Interval')
-        # x_list = np.array(episodes_x)
-        # y_list = np.array(results_y)
-        # y_list = y_list.reshape(-1, plt_intvl)
-        # means = y_list.mean(axis=1)
-        # plt.plot(x_list, means)
-        # plt.show()
+            results_y.append(r)
+            if (episode+1) % plt_intvl == 0:
+                plt.figure(2)
+                plt.title('Training...')
+                plt.xlabel('Episode')
+                plt.ylabel('Mean Results of Interval')
+                episodes_x.append(episode)
+                x_list = np.array(episodes_x)
+                y_list = np.array(results_y)
+                y_list = y_list.reshape(-1, plt_intvl)
+                means = y_list.mean(axis=1)
+                plt.plot(x_list, means)
+                plt.pause(0.0001)  # pause a bit so that plots are updated
+                plt.clf()
+
+        plt.figure(2)
+        plt.title('Training...')
+        plt.xlabel('Episode')
+        plt.ylabel('Mean Results of Interval')
+        x_list = np.array(episodes_x)
+        y_list = np.array(results_y)
+        print(results_y)
+        y_list = y_list.reshape(-1, plt_intvl)
+        means = y_list.mean(axis=1)
+        plt.plot(x_list, means)
+        plt.show()
 
     def get_act(self, x, theta):
         assert(len(theta) > 0)
@@ -168,6 +154,14 @@ class REINFORCEAgent(IAgent):
         i_act = self.get_act(x, self.theta)
         return i_act
 
+    # 優先度が最も高い手を返す(after_states -> act_i)
+    def get_greedy_a(self, states):
+        assert(len(self.theta) > 0)
+        x = self.get_x(states)
+        hs = x.dot(self.theta)
+        amax = np.argmax(hs)
+        return amax
+
     def __init__(self, game, seed=None):
         self._game = game
         self._rnd = random.Random(seed)
@@ -178,7 +172,9 @@ class REINFORCEAgent(IAgent):
 
         self.S_SIZE = (6*6+6)*3
         self.W_SIZE = ((self.S_SIZE+1)*(self.S_SIZE+2))//2
-        self.T_SIZE = self.W_SIZE
+        self.T_SIZE = self.X_SIZE = self.W_SIZE
+        self.A_MAX = 32  # 最大有効候補手
+        self.MAX_T = 100  # 最大行動回数(=最大ターン数/2)
 
         self.w = None
         self.theta = None

@@ -40,7 +40,7 @@ class TCPPlayer():
         #         # 以下確実に脱出可能な場合
 
         # 脱出可能だと判定できなかった場合
-        act_i = self.agent.get_act_afterstates(self._game.after_states())
+        act_i = self.agent.get_greedy_a(self._game.after_states())
         i, dir = self._game.legalMoves()[act_i]
         unit_names = ["A", "B", "C", "D", "E", "F", "G", "H"]
         unit_name = unit_names[i]
@@ -68,4 +68,4 @@ if __name__ == "__main__":
     game = Geister2()
     agent = REINFORCEAgent(game)
     agent.theta = np.load(file_name)
-    tcp_connect(agent=agent, game=game, port=10001, host="itolab.asuscomm.com")
+    tcp_connect(agent=agent, game=game, port=10001, host="localhost")#itolab.asuscomm.com")
