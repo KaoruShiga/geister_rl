@@ -1,4 +1,6 @@
 import random
+import cProfile
+import pstats
 import numpy as np
 import matplotlib.pyplot as plt
 from geister2 import Geister2
@@ -8,17 +10,29 @@ from random_agent import RandomAgent
 
 
 def learn():
-    file_name = "weights_5/rf_4"
-    seed = 121
+    file_name = "weights/rfvsrnd4"
+    seed = 100
     game = Geister2()
     agent = REINFORCEAgent(game, seed)
     agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.1
     agent.theta = np.random.randn(agent.T_SIZE)*agent.beta*0.1
     opponent = RandomAgent(game, seed+1)
     env = VsEnv(opponent, game, seed)
+    # 計測準備
+    pr = cProfile.Profile()
+    pr.enable()
+    # 計測開始
     agent.learn(env, seed)
-    # np.save(file_name+"_w", agent.w)
-    # np.save(file_name+"_theta", agent.theta)
+    # 計測終了，計測結果出力
+    pr.disable()
+    stats = pstats.Stats(pr)
+    stats.sort_stats('cumtime')
+    stats.print_stats()
+    pr.dump_stats('profile.stats')
+    # 事後処理
+
+    np.save(file_name+"_w", agent.w)
+    np.save(file_name+"_theta", agent.theta)
 
 
 class REINFORCEAgent(IAgent):
@@ -29,7 +43,7 @@ class REINFORCEAgent(IAgent):
         # rnd = self._rnd
         assert(env.S_SIZE == self.S_SIZE)
 
-        plt_intvl = 100
+        plt_intvl = 500
         episodes_x = []
         results_y = []
         # 読み込み
@@ -89,17 +103,16 @@ class REINFORCEAgent(IAgent):
                 plt.pause(0.0001)  # pause a bit so that plots are updated
                 plt.clf()
 
-        plt.figure(2)
-        plt.title('Training...')
-        plt.xlabel('Episode')
-        plt.ylabel('Mean Results of Interval')
-        x_list = np.array(episodes_x)
-        y_list = np.array(results_y)
-        print(results_y)
-        y_list = y_list.reshape(-1, plt_intvl)
-        means = y_list.mean(axis=1)
-        plt.plot(x_list, means)
-        plt.show()
+        # plt.figure(2)
+        # plt.title('Training...')
+        # plt.xlabel('Episode')
+        # plt.ylabel('Mean Results of Interval')
+        # x_list = np.array(episodes_x)
+        # y_list = np.array(results_y)
+        # y_list = y_list.reshape(-1, plt_intvl)
+        # means = y_list.mean(axis=1)
+        # plt.plot(x_list, means)
+        # plt.show()
 
     def get_act(self, x, theta):
         assert(len(theta) > 0)
@@ -137,14 +150,15 @@ class REINFORCEAgent(IAgent):
             for state in afterstates]
         a_size = len(afterstates)
         s1_size = self.S_SIZE + 1  # 通常サイズ+バイアス項
-        x = np.array(states_1ht).reshape(a_size, s1_size)
+        x = np.array(states_1ht).reshape(a_size, s1_size, 1)
         # # 二駒関係
         # y = np.array([np.dot(s.reshape(-1, 1), s.reshape(1, -1)) for s in x])
         #     .reshape(a_size, -1)
         # 二駒関係v2
-        y = np.zeros((a_size, (s1_size*(s1_size+1)//2)))
-        for i in range(s1_size):
-            y[:, (i*(i+1)//2):((i+1)*(i+2)//2)] = x[:, i:i+1]*x[:, 0:i+1]
+        # y = np.zeros((a_size, (s1_size*(s1_size+1)//2)))
+        y = (x*x.reshape(a_size, 1, s1_size))[:, self.ROW_IDS, self.COL_IDS]
+        # for i in range(s1_size):
+        #     y[:, (i*(i+1)//2):((i+1)*(i+2)//2)] = x[:, i:i+1]*x[:, 0:i+1]
         y[:, -1] = 1  # バイアス項
         return y
 
@@ -178,6 +192,13 @@ class REINFORCEAgent(IAgent):
 
         self.w = None
         self.theta = None
+
+        self.ROW_IDS = []
+        self.COL_IDS = []
+        for i in range(self.S_SIZE+1):
+            self.ROW_IDS += [i]*(i+1)
+            for j in range(i+1):
+                self.COL_IDS += [j]
 
 
 if __name__ == "__main__":

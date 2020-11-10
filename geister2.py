@@ -1,5 +1,6 @@
 # added by Kaoru Shiga
 import copy
+import _pickle as cPickle
 from geister import Geister
 
 
@@ -105,7 +106,7 @@ class Geister2(Geister):
         dst = []
         for move in moves:
             i, d = move                        # N:d=0, E:d=1, S:d=3, W:d=2
-            state = copy.deepcopy(crr_state)
+            state = cPickle.loads(cPickle.dumps(crr_state, -1))
             unit = self.units[i]
             x, y = unit.x, unit.y
             color = 1 if (unit.color == 0) else (      # BLUE(味方の青)

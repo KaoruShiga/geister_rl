@@ -150,5 +150,20 @@ def load(str, len=None):
     return dst
 
 
+def load_agent(ps_name, game, seed=None):
+    agent = REINFORCEAgent(game, seed)
+    agent.w = load(ps_name + '_w.npy')
+    agent.theta = load(ps_name + '_theta.npy')
+    return agent
+
+
+def load_agents(pass_list, game, seed=None):
+    agents = []
+    for ps_name in pass_list:
+        agents.append(load_agent(ps_name, game, seed))
+        seed += 1
+    return agents
+
+
 if __name__ == "__main__":
     battle()

@@ -68,4 +68,4 @@ if __name__ == "__main__":
     game = Geister2()
     agent = REINFORCEAgent(game)
     agent.theta = np.load(file_name)
-    tcp_connect(agent=agent, game=game, port=10001, host="localhost")#itolab.asuscomm.com")
+    tcp_connect(agent=agent, game=game, port=10000, host="itolab.asuscomm.com")#localhost
