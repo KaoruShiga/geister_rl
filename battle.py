@@ -40,7 +40,7 @@ def battle(agent1, agent2, bttl_num=1, seed=None):
 if __name__ == "__main__":
     seed = 100
     geister = Geister2()
-    agent1 = load_agent("weights/rfvsrnd1", geister, seed)
+    agent1 = load_agent("weights/rfvsrnd4", geister, seed)
     agent2 = load_agent("weights/rfvsrnd3", geister, seed)
-    results = battle(agent1, agent2, 1000)
+    results = battle(agent1, agent2, 100)
     print(results)

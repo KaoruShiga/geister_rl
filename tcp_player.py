@@ -64,8 +64,9 @@ if __name__ == "__main__":
     # # 4. 引数を解析
     # args = parser.parse_args()
 
-    file_name = "weights/weights_13/reinforce_5_theta.npy"
+    file_name = "weights/rfvsrnd4_theta.npy"
     game = Geister2()
     agent = REINFORCEAgent(game)
     agent.theta = np.load(file_name)
-    tcp_connect(agent=agent, game=game, port=10000, host="itolab.asuscomm.com")#localhost
+    # "itolab.asuscomm.com", "localhost"
+    tcp_connect(agent=agent, game=game, port=10000, host="localhost")

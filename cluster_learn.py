@@ -8,8 +8,8 @@ from random_agent import RandomAgent
 
 
 def cluster_learn():
-    seed = 120
-    file_name = "weights/weights_14/reinforce_"
+    seed = 121
+    file_name = "weights/weights_16/reinforce_"
     agents_len = 9
     max_episodes = 500*(agents_len)
     plt_intvl = 50*(agents_len)

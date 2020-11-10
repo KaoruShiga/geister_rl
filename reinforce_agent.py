@@ -10,8 +10,8 @@ from random_agent import RandomAgent
 
 
 def learn():
-    file_name = "weights/rfvsrnd4"
-    seed = 100
+    file_name = "weights/rfvsrnd5"
+    seed = 101
     game = Geister2()
     agent = REINFORCEAgent(game, seed)
     agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.1
@@ -36,7 +36,7 @@ def learn():
 
 
 class REINFORCEAgent(IAgent):
-    def learn(self, env, seed=1, max_episodes=10000):
+    def learn(self, env, seed=1, max_episodes=100):
         alpha = self.alpha
         beta = self.beta
         # epsilon = self.epsilon
@@ -87,6 +87,8 @@ class REINFORCEAgent(IAgent):
                 exps = np.exp(hs)
                 pis = exps/exps.sum()
                 theta += alpha*r*(xa - pis.dot(x))
+                # 焼きなまし法
+                # theta += alpha*(episode/max_episodes)*r*(xa - pis.dot(x))
 
             results_y.append(r)
             if (episode+1) % plt_intvl == 0:
@@ -125,24 +127,32 @@ class REINFORCEAgent(IAgent):
         act_i = np.random.choice(a_size, p=pis)
         return act_i
 
-    # using learned weights with no learning.
+    # random
     def init_red(self):
-        arr_string = ["A", "B", "C", "D", "E", "F", "G", "H"]
-        states = self._game.init_states()
-        x = self.get_x(states)
-        act_i = self.get_act(x, self.theta)
-        state = states[act_i]
-        arr = []
-        arr[0:4] = state[1][25:29]
-        arr[4:8] = state[1][31:35]
-        dst = []
-        for i in range(len(arr)):
-            if arr[i] == 1:
-                dst.append(arr_string[i])
-        return dst
+        arr = ["A", "B", "C", "D", "E", "F", "G", "H"]
+        self._rnd.shuffle(arr)
+        return arr[0:4]
+    # # using learned weights with no learning.
+    # def init_red(self):
+    #     arr_string = ["A", "B", "C", "D", "E", "F", "G", "H"]
+    #     states = self._game.init_states()
+    #     x = self.get_x(states)
+    #     act_i = self.get_act(x, self.theta)
+    #     state = states[act_i]
+    #     arr = []
+    #     arr[0:4] = state[1][25:29]
+    #     arr[4:8] = state[1][31:35]
+    #     dst = []
+    #     for i in range(len(arr)):
+    #         if arr[i] == 1:
+    #             dst.append(arr_string[i])
+    #     return dst
 
     def get_a_size(self, afterstates):
         return len(afterstates)
+
+    def tmpy(self, x, a_size, s1_size):
+        return (x[:, self.ROW_IDS]*x[:, self.COL_IDS].reshape(a_size, 1, s1_size))
 
     def get_x(self, afterstates):
         states_1ht = [
@@ -156,11 +166,12 @@ class REINFORCEAgent(IAgent):
         #     .reshape(a_size, -1)
         # 二駒関係v2
         # y = np.zeros((a_size, (s1_size*(s1_size+1)//2)))
-        y = (x*x.reshape(a_size, 1, s1_size))[:, self.ROW_IDS, self.COL_IDS]
         # for i in range(s1_size):
         #     y[:, (i*(i+1)//2):((i+1)*(i+2)//2)] = x[:, i:i+1]*x[:, 0:i+1]
-        y[:, -1] = 1  # バイアス項
-        return y
+        # 二駒関係v3
+        x = self.tmpy(x, a_size, s1_size)
+        x[:, -1] = 1  # バイアス項
+        return x
 
     def get_act_afterstates(self, states):
         assert(self.theta.shape[0] != 0)
