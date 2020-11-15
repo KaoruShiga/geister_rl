@@ -36,7 +36,7 @@ def learn():
 
 
 class REINFORCEAgent(IAgent):
-    def learn(self, env, seed=1, max_episodes=100):
+    def learn(self, env, seed=1, max_episodes=100000):
         alpha = self.alpha
         beta = self.beta
         # epsilon = self.epsilon
@@ -46,6 +46,7 @@ class REINFORCEAgent(IAgent):
         plt_intvl = 500
         episodes_x = []
         results_y = []
+        dlt_y = []
         # 読み込み
         # mcagent.w = np.load("td_4.npy")
         # wを小さな正規乱数で初期化
@@ -79,8 +80,11 @@ class REINFORCEAgent(IAgent):
 
                 x = nx
                 a = na
+            dlts = []
             for xa, x, xs in zip(xa_list, x_list, xs_list):
-                dlt = r - w.dot(xs)  # 報酬予測は事後状態を用いてはならない
+                q = 2/(1 + np.exp(-np.dot(w, xs))) - 1
+                dlt = r - q  # 報酬予測は事後状態を用いてはならない
+                dlts.append(abs(dlt))
                 w += beta*dlt*xs
                 hs = x.dot(theta)
                 hs -= hs.max()  # overflow回避のため
@@ -91,12 +95,14 @@ class REINFORCEAgent(IAgent):
                 # theta += alpha*(episode/max_episodes)*r*(xa - pis.dot(x))
 
             results_y.append(r)
+            dlt_y.append(np.array(dlts).mean())
             if (episode+1) % plt_intvl == 0:
+                episodes_x.append(episode)
+                # 一つ目 results
                 plt.figure(2)
                 plt.title('Training...')
                 plt.xlabel('Episode')
                 plt.ylabel('Mean Results of Interval')
-                episodes_x.append(episode)
                 x_list = np.array(episodes_x)
                 y_list = np.array(results_y)
                 y_list = y_list.reshape(-1, plt_intvl)
@@ -104,17 +110,41 @@ class REINFORCEAgent(IAgent):
                 plt.plot(x_list, means)
                 plt.pause(0.0001)  # pause a bit so that plots are updated
                 plt.clf()
+                # 二つ目 予測誤差 Δv(s)
+                plt.figure(1)
+                plt.title('Training...')
+                plt.xlabel('Episode')
+                plt.ylabel('Mean Dlt v(s)')
+                x_list = np.array(episodes_x)
+                y_list = np.array(dlt_y)
+                y_list = y_list.reshape(-1, plt_intvl)
+                means = y_list.mean(axis=1)
+                plt.plot(x_list, means)
+                plt.pause(0.0001)  # pause a bit so that plots are updated
+                plt.clf()
 
-        # plt.figure(2)
-        # plt.title('Training...')
-        # plt.xlabel('Episode')
-        # plt.ylabel('Mean Results of Interval')
-        # x_list = np.array(episodes_x)
-        # y_list = np.array(results_y)
-        # y_list = y_list.reshape(-1, plt_intvl)
-        # means = y_list.mean(axis=1)
-        # plt.plot(x_list, means)
-        # plt.show()
+        # 一つ目 results
+        plt.figure(2)
+        plt.title('Training...')
+        plt.xlabel('Episode')
+        plt.ylabel('Mean Results of Interval')
+        x_list = np.array(episodes_x)
+        y_list = np.array(results_y)
+        y_list = y_list.reshape(-1, plt_intvl)
+        means = y_list.mean(axis=1)
+        plt.plot(x_list, means)
+        plt.show()
+        # 二つ目 予測誤差 Δv(s)
+        plt.figure(1)
+        plt.title('Training...')
+        plt.xlabel('Episode')
+        plt.ylabel('Mean Dlt v(s)')
+        x_list = np.array(episodes_x)
+        y_list = np.array(dlt_y)
+        y_list = y_list.reshape(-1, plt_intvl)
+        means = y_list.mean(axis=1)
+        plt.plot(x_list, means)
+        plt.show()
 
     def get_act(self, x, theta):
         assert(len(theta) > 0)
@@ -151,16 +181,13 @@ class REINFORCEAgent(IAgent):
     def get_a_size(self, afterstates):
         return len(afterstates)
 
-    def tmpy(self, x, a_size, s1_size):
-        return (x[:, self.ROW_IDS]*x[:, self.COL_IDS].reshape(a_size, 1, s1_size))
-
     def get_x(self, afterstates):
         states_1ht = [
             state[0] + state[1] + state[2] + [1]
             for state in afterstates]
         a_size = len(afterstates)
         s1_size = self.S_SIZE + 1  # 通常サイズ+バイアス項
-        x = np.array(states_1ht).reshape(a_size, s1_size, 1)
+        x = np.array(states_1ht)
         # # 二駒関係
         # y = np.array([np.dot(s.reshape(-1, 1), s.reshape(1, -1)) for s in x])
         #     .reshape(a_size, -1)
@@ -169,7 +196,7 @@ class REINFORCEAgent(IAgent):
         # for i in range(s1_size):
         #     y[:, (i*(i+1)//2):((i+1)*(i+2)//2)] = x[:, i:i+1]*x[:, 0:i+1]
         # 二駒関係v3
-        x = self.tmpy(x, a_size, s1_size)
+        x = (x[:, self.ROW_IDS]*x[:, self.COL_IDS]).reshape(a_size, -1)
         x[:, -1] = 1  # バイアス項
         return x
 
