@@ -8,18 +8,18 @@ from random_agent import RandomAgent
 
 
 def cluster_learn():
-    seed = 121
+    seed = 122
     file_name = "weights/weights_16/reinforce_"
-    agents_len = 9
+    agents_len = 18
     max_episodes = 500*(agents_len)
     plt_intvl = 50*(agents_len)
     plt_bttl = 200
-    linestyles = [':', '--', '-.']  # alphaに相当
-    plt_colors = ['r', 'g', 'b']  # betaに相当
+    linestyles = [':', '--', '-.']  # alphaに相当 # linestyle=(0, (1, 0))
+    plt_colors = ['m', 'r', 'g', 'c', 'b', 'y']  # betaに相当,mマゼンタ(紫),cシアン(青緑)
     linestyle_avg = '-'
     plt_color_avg = 'k'
     alphas = [0.003, 0.005, 0.01]
-    betas = [0.0001, 0.0003, 0.001]
+    betas = [0.0005, 0.0001, 0.0003, 0.0005, 0.001, 0.0015]
     assert(len(linestyles) == len(alphas))
     assert(len(plt_colors) == len(betas))
     assert(len(alphas)*len(betas) == agents_len)
@@ -35,9 +35,9 @@ def cluster_learn():
     # 重みを小さな正規乱数で初期化
     for agent in agents:
         if agent.w is None:
-            agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.1
+            agent.w = np.zeros(agent.W_SIZE)
         if agent.theta is None:
-            agent.theta = np.random.randn(agent.T_SIZE)*agent.beta*0.1
+            agent.theta = np.zeros(agent.T_SIZE)
 
     episodes_x = []
     results_y = [[] for _ in range(agents_len)]
@@ -45,11 +45,12 @@ def cluster_learn():
     rnd_agent = RandomAgent(game, seed*2+1)
     env = VsEnv(agents[0], game, seed)
     for episode in range(max_episodes):
-        # ランダムに学習個体を選び，その相手はすべての候補に対して行う(順番はランダム)
-        for i in rnd.sample(range(agents_len), agents_len):  # -> [2, 1, 0]など
-            # i = rnd.randrange(agents_len)
+        # 学習個体を一度ずつ選ぶ(順番はランダム)
+        for i in rnd.sample(range(agents_len), agents_len):  # -> [2, 0, 1]など
+            # i = rnd.randrange(agents_len)  # 学習個体はランダム
+            # # 対戦相手は，全ての候補を一度ずつ選ぶ(順番はランダム)
             # for j in rnd.sample(range(agents_len), agents_len):
-            j = rnd.randrange(agents_len)
+            j = rnd.randrange(agents_len)  # 対戦相手はランダムに一度だけ
             agent = agents[i]
             env._opponent = agents[j]
             agent.learn(env, max_episodes=1)
@@ -102,6 +103,7 @@ def cluster_learn():
                      c=plt_color_avg,
                      label=agents_len)
             plt.pause(0.01)  # pause a bit so that plots are updated
+    plt.savefig(file_name+str(".png"))
     plt.show()
     for i in range(agents_len):
         np.save(file_name+str(i+1)+"_w", agents[i].w)

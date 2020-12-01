@@ -10,12 +10,12 @@ from random_agent import RandomAgent
 
 
 def learn():
-    file_name = "weights/rfvsrnd5"
-    seed = 101
+    file_name = "weights/rfvsrnd6"
+    seed = 103
     game = Geister2()
     agent = REINFORCEAgent(game, seed)
-    agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.1
-    agent.theta = np.random.randn(agent.T_SIZE)*agent.beta*0.1
+    agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.0001
+    agent.theta = np.random.randn(agent.T_SIZE)*agent.beta*0.0001
     opponent = RandomAgent(game, seed+1)
     env = VsEnv(opponent, game, seed)
     # 計測準備
@@ -36,7 +36,7 @@ def learn():
 
 
 class REINFORCEAgent(IAgent):
-    def learn(self, env, seed=1, max_episodes=100000):
+    def learn(self, env, seed=1, max_episodes=100000, draw_mode=False):
         alpha = self.alpha
         beta = self.beta
         # epsilon = self.epsilon
@@ -96,7 +96,7 @@ class REINFORCEAgent(IAgent):
 
             results_y.append(r)
             dlt_y.append(np.array(dlts).mean())
-            if (episode+1) % plt_intvl == 0:
+            if draw_mode and ((episode+1) % plt_intvl == 0):
                 episodes_x.append(episode)
                 # 一つ目 results
                 plt.figure(2)
@@ -123,28 +123,29 @@ class REINFORCEAgent(IAgent):
                 plt.pause(0.0001)  # pause a bit so that plots are updated
                 plt.clf()
 
-        # 一つ目 results
-        plt.figure(2)
-        plt.title('Training...')
-        plt.xlabel('Episode')
-        plt.ylabel('Mean Results of Interval')
-        x_list = np.array(episodes_x)
-        y_list = np.array(results_y)
-        y_list = y_list.reshape(-1, plt_intvl)
-        means = y_list.mean(axis=1)
-        plt.plot(x_list, means)
-        plt.show()
-        # 二つ目 予測誤差 Δv(s)
-        plt.figure(1)
-        plt.title('Training...')
-        plt.xlabel('Episode')
-        plt.ylabel('Mean Dlt v(s)')
-        x_list = np.array(episodes_x)
-        y_list = np.array(dlt_y)
-        y_list = y_list.reshape(-1, plt_intvl)
-        means = y_list.mean(axis=1)
-        plt.plot(x_list, means)
-        plt.show()
+        if (draw_mode):
+            # 一つ目 results
+            plt.figure(2)
+            plt.title('Training...')
+            plt.xlabel('Episode')
+            plt.ylabel('Mean Results of Interval')
+            x_list = np.array(episodes_x)
+            y_list = np.array(results_y)
+            y_list = y_list.reshape(-1, plt_intvl)
+            means = y_list.mean(axis=1)
+            plt.plot(x_list, means)
+            plt.show()
+            # 二つ目 予測誤差 Δv(s)
+            plt.figure(1)
+            plt.title('Training...')
+            plt.xlabel('Episode')
+            plt.ylabel('Mean Dlt v(s)')
+            x_list = np.array(episodes_x)
+            y_list = np.array(dlt_y)
+            y_list = y_list.reshape(-1, plt_intvl)
+            means = y_list.mean(axis=1)
+            plt.plot(x_list, means)
+            plt.show()
 
     def get_act(self, x, theta):
         assert(len(theta) > 0)
@@ -219,8 +220,8 @@ class REINFORCEAgent(IAgent):
         self._rnd = random.Random(seed)
         np.random.seed(seed)
 
-        self.alpha = 0.005
-        self.beta = 0.0003
+        self.alpha = 0.002
+        self.beta = 0.00005
 
         self.S_SIZE = (6*6+6)*3
         self.W_SIZE = ((self.S_SIZE+1)*(self.S_SIZE+2))//2

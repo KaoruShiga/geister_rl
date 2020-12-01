@@ -157,11 +157,12 @@ def load_agent(ps_name, game, seed=None):
     return agent
 
 
-def load_agents(pass_list, game, seed=None):
+def load_agents(path_list, game, seed=None):
     agents = []
-    for ps_name in pass_list:
+    for ps_name in path_list:
         agents.append(load_agent(ps_name, game, seed))
-        seed += 1
+        if not(seed is None):
+            seed += 1
     return agents
 
 
