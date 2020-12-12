@@ -84,7 +84,7 @@ class REINFORCEAgent(IAgent):
             for xa, x, xs in zip(xa_list, x_list, xs_list):
                 q = 2/(1 + np.exp(-np.dot(w, xs))) - 1
                 dlt = r - q  # 報酬予測は事後状態を用いてはならない
-                dlts.append(abs(dlt))
+                dlts.append(dlt**2)
                 w += beta*dlt*xs
                 hs = x.dot(theta)
                 hs -= hs.max()  # overflow回避のため
@@ -103,6 +103,8 @@ class REINFORCEAgent(IAgent):
                 plt.title('Training...')
                 plt.xlabel('Episode')
                 plt.ylabel('Mean Results of Interval')
+                plt.text(50, 0.5, "alpha="+str(self.alpha))
+                plt.text(50, 0.4, "beta="+str(self.beta))
                 x_list = np.array(episodes_x)
                 y_list = np.array(results_y)
                 y_list = y_list.reshape(-1, plt_intvl)
@@ -114,7 +116,9 @@ class REINFORCEAgent(IAgent):
                 plt.figure(1)
                 plt.title('Training...')
                 plt.xlabel('Episode')
-                plt.ylabel('Mean Dlt v(s)')
+                plt.ylabel('Mean Dlt v(s)^2')
+                plt.text(50, 0.5, "alpha="+str(self.alpha))
+                plt.text(50, 0.4, "beta="+str(self.beta))
                 x_list = np.array(episodes_x)
                 y_list = np.array(dlt_y)
                 y_list = y_list.reshape(-1, plt_intvl)
@@ -129,6 +133,8 @@ class REINFORCEAgent(IAgent):
             plt.title('Training...')
             plt.xlabel('Episode')
             plt.ylabel('Mean Results of Interval')
+            plt.text(50, 0.5, "alpha="+str(self.alpha))
+            plt.text(50, 0.4, "beta="+str(self.beta))
             x_list = np.array(episodes_x)
             y_list = np.array(results_y)
             y_list = y_list.reshape(-1, plt_intvl)
@@ -139,7 +145,9 @@ class REINFORCEAgent(IAgent):
             plt.figure(1)
             plt.title('Training...')
             plt.xlabel('Episode')
-            plt.ylabel('Mean Dlt v(s)')
+            plt.ylabel('Mean Dlt v(s)^2')
+            plt.text(50, 0.5, "alpha="+str(self.alpha))
+            plt.text(50, 0.4, "beta="+str(self.beta))
             x_list = np.array(episodes_x)
             y_list = np.array(dlt_y)
             y_list = y_list.reshape(-1, plt_intvl)

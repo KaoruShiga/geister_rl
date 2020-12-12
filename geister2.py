@@ -106,6 +106,7 @@ class Geister2(Geister):
         dst = []
         for move in moves:
             i, d = move                        # N:d=0, E:d=1, S:d=3, W:d=2
+            # copy(crr_state) の速度を向上させたもの
             state = cPickle.loads(cPickle.dumps(crr_state, -1))
             unit = self.units[i]
             x, y = unit.x, unit.y

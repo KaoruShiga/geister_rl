@@ -1,4 +1,5 @@
 # Guister environment vs the opponent(reffered in init)
+import random
 import numpy as np
 from random_agent import RandomAgent
 from geister2 import Geister2
