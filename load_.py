@@ -150,8 +150,8 @@ def load(str, len=None):
     return dst
 
 
-def load_agent(ps_name, game, seed=None):
-    agent = REINFORCEAgent(game, seed)
+def load_agent(ps_name, game, seed=None, AgentClass=REINFORCEAgent):
+    agent = AgentClass(game, seed)
     agent.w = load(ps_name + '_w.npy')
     agent.theta = load(ps_name + '_theta.npy')
     return agent

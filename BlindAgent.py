@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from geister2 import Geister2
 from vsenv import VsEnv
+from vsenv2 import VsEnv2
 from iagent import IAgent
 from random_agent import RandomAgent
 from reinforce_agent import REINFORCEAgent
@@ -14,11 +15,10 @@ from tcp_player import tcp_connect
 
 def learn():
     file_name = "weights/blindvsrnd3"
-    seed = 111
+    seed = 112
     game = Geister2()
-    agent = BlindAgent(game, seed)
-    agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.00001
-    agent.theta = np.random.randn(agent.T_SIZE)*agent.beta*0.00001
+    agent = load_agent("weights/weights_10/reinforce_6",
+                       game, seed, BlindAgent)
     opponent = RandomAgent(game, seed+1)
     env = VsEnv(opponent, game, seed)
     # 計測準備
@@ -38,20 +38,26 @@ def learn():
     np.save(file_name+"_theta", agent.theta)
 
 
-def learnVsBlind(file_name_blind):
-    file_name = "weights/rfvscnstblind"
-    seed = 114
+def learnVsSelf():
+    file_name = "weights/blindvsself2"
+    seed = 124
     game = Geister2()
-    agent = REINFORCEAgent(game, seed)
-    agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.00001
-    agent.theta = np.random.randn(agent.T_SIZE)*agent.beta*0.00001
-    opponent = load_agent(file_name_blind, game, seed)
-    env = VsEnv(opponent, game, seed)
+    agent = load_agent("weights/weights_10/reinforce_6",
+                       game, seed, BlindAgent)
+    # agent = BlindAgent(game, seed)
+    # agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.00001
+    # agent.theta = np.random.randn(agent.T_SIZE)*agent.beta*0.00001
+    agent.alpha = 0.001
+    agent.beta = 0.00002
+    opponent = agent  # 自己対戦
+    env = VsEnv2(opponent, game, seed)
+    rndagent = RandomAgent(game, seed)
     # 計測準備
     pr = cProfile.Profile()
     pr.enable()
     # 計測開始
-    agent.learn(env, seed=seed, max_episodes=100000, draw_mode=True)
+    agent.learn(env, seed=seed, max_episodes=100000,
+                draw_mode=True, draw_opp=rndagent)
     # 計測終了，計測結果出力
     pr.disable()
     stats = pstats.Stats(pr)
@@ -70,8 +76,8 @@ class BlindAgent(REINFORCEAgent):
     # xは0-1の実数になりうる．自分の駒が赤(青)である確率を示す(取られた駒から計算)
     # 小数でも「きっと」うまくいく => デバッグ完了
     def get_x(self, afterstates):
-        left_b = 4  # 取られた青ゴマの数
-        left_r = 4  # 取られた赤ゴマの数
+        left_b = 4  # 取られていない青ゴマの数
+        left_r = 4  # 取られていない赤ゴマの数
         for i in range(3):
             if(afterstates[0][i][38] == 1):
                 left_b = 4 - (i+1)
@@ -99,7 +105,7 @@ class BlindAgent(REINFORCEAgent):
 if __name__ == "__main__":
     # learn()
 
-    learnVsBlind("weights/blindvsrnd1")
+    learnVsSelf()
 
     # seed = 1
     # game = Geister2()

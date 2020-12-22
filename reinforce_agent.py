@@ -36,14 +36,35 @@ def learn():
 
 
 class REINFORCEAgent(IAgent):
-    def learn(self, env, seed=1, max_episodes=100000, draw_mode=False):
+    def fit(self, xa_list, x_list, xs_list, r):
+        w = self.w
+        theta = self.theta
         alpha = self.alpha
         beta = self.beta
+        dlts = []
+        for xa, x, xs in zip(xa_list, x_list, xs_list):
+            q = 2/(1 + np.exp(-np.dot(w, xs))) - 1
+            dlt = r - q  # 報酬予測は事後状態を用いてはならない
+            dlts.append(dlt**2)
+            w += beta*dlt*xs
+            hs = x.dot(theta)
+            hs -= hs.max()  # overflow回避のため
+            exps = np.exp(hs)
+            pis = exps/exps.sum()
+            theta += alpha*r*(xa - pis.dot(x))
+            # 焼きなまし法
+            # theta += alpha*(episode/max_episodes)*r*(xa - pis.dot(x))
+        return dlts
+
+    def learn(self, env, seed=1, max_episodes=100000,
+              draw_mode=False, draw_opp=None):
+        assert(draw_mode or (draw_opp is None))
         # epsilon = self.epsilon
         # rnd = self._rnd
         assert(env.S_SIZE == self.S_SIZE)
 
         plt_intvl = 500
+        plt_bttl = 50
         episodes_x = []
         results_y = []
         dlt_y = []
@@ -55,8 +76,9 @@ class REINFORCEAgent(IAgent):
         #     self.w = np.random.randn(self.W_SIZE)*alpha*0.1
         # if self.theta is None:
         #     self.theta = np.random.randn(self.T_SIZE)*beta*0.1
-        w = self.w
         theta = self.theta
+
+        denv = VsEnv(draw_opp, game=Geister2(), seed=seed)
         for episode in range(max_episodes):
             afterstates = env.on_episode_begin(self.init_red())
             xs = self.get_x([env.get_state()])[0]
@@ -80,23 +102,27 @@ class REINFORCEAgent(IAgent):
 
                 x = nx
                 a = na
-            dlts = []
-            for xa, x, xs in zip(xa_list, x_list, xs_list):
-                q = 2/(1 + np.exp(-np.dot(w, xs))) - 1
-                dlt = r - q  # 報酬予測は事後状態を用いてはならない
-                dlts.append(dlt**2)
-                w += beta*dlt*xs
-                hs = x.dot(theta)
-                hs -= hs.max()  # overflow回避のため
-                exps = np.exp(hs)
-                pis = exps/exps.sum()
-                theta += alpha*r*(xa - pis.dot(x))
-                # 焼きなまし法
-                # theta += alpha*(episode/max_episodes)*r*(xa - pis.dot(x))
+            dlts = self.fit(xa_list, x_list, xs_list, r)
 
-            results_y.append(r)
+            if draw_opp is None:
+                results_y.append(r)
             dlt_y.append(np.array(dlts).mean())
             if draw_mode and ((episode+1) % plt_intvl == 0):
+                if draw_opp is not None:
+                    denv._opponent = draw_opp
+                    for bttl_i in range(plt_bttl):
+                        afterstates = denv.on_episode_begin(self.init_red())
+                        x = self.get_x(afterstates)
+                        a = self.get_act(x, theta)
+                        for t in range(300):
+                            r, nafterstates = denv.on_action_number_received(a)
+                            if r != 0:
+                                break
+                            nx = self.get_x(nafterstates)
+                            na = self.get_act(nx, theta)
+                            x = nx
+                            a = na
+                        results_y.append(r)
                 episodes_x.append(episode)
                 # 一つ目 results
                 plt.figure(2)
@@ -107,7 +133,7 @@ class REINFORCEAgent(IAgent):
                 plt.text(50, 0.4, "beta="+str(self.beta))
                 x_list = np.array(episodes_x)
                 y_list = np.array(results_y)
-                y_list = y_list.reshape(-1, plt_intvl)
+                y_list = y_list.reshape(-1, plt_intvl if draw_opp is None else plt_bttl)
                 means = y_list.mean(axis=1)
                 plt.plot(x_list, means)
                 plt.pause(0.0001)  # pause a bit so that plots are updated
@@ -137,7 +163,7 @@ class REINFORCEAgent(IAgent):
             plt.text(50, 0.4, "beta="+str(self.beta))
             x_list = np.array(episodes_x)
             y_list = np.array(results_y)
-            y_list = y_list.reshape(-1, plt_intvl)
+            y_list = y_list.reshape(-1, plt_intvl if draw_opp is None else plt_bttl)
             means = y_list.mean(axis=1)
             plt.plot(x_list, means)
             plt.show()
