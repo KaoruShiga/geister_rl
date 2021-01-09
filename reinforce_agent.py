@@ -36,29 +36,10 @@ def learn():
 
 
 class REINFORCEAgent(IAgent):
-    def fit(self, xa_list, x_list, xs_list, r):
-        w = self.w
-        theta = self.theta
-        alpha = self.alpha
-        beta = self.beta
-        dlts = []
-        for xa, x, xs in zip(xa_list, x_list, xs_list):
-            q = 2/(1 + np.exp(-np.dot(w, xs))) - 1
-            dlt = r - q  # 報酬予測は事後状態を用いてはならない
-            dlts.append(dlt**2)
-            w += beta*dlt*xs
-            hs = x.dot(theta)
-            hs -= hs.max()  # overflow回避のため
-            exps = np.exp(hs)
-            pis = exps/exps.sum()
-            theta += alpha*r*(xa - pis.dot(x))
-            # 焼きなまし法
-            # theta += alpha*(episode/max_episodes)*r*(xa - pis.dot(x))
-        return dlts
-
     def learn(self, env, seed=1, max_episodes=100000,
               draw_mode=False, draw_opp=None):
-        assert(draw_mode or (draw_opp is None))
+        alpha = self.alpha
+        beta = self.beta
         # epsilon = self.epsilon
         # rnd = self._rnd
         assert(env.S_SIZE == self.S_SIZE)
@@ -67,7 +48,8 @@ class REINFORCEAgent(IAgent):
         plt_bttl = 50
         episodes_x = []
         results_y = []
-        dlt_y = []
+        dlts_y = []
+        dlts = []
         # 読み込み
         # mcagent.w = np.load("td_4.npy")
         # wを小さな正規乱数で初期化
@@ -76,6 +58,7 @@ class REINFORCEAgent(IAgent):
         #     self.w = np.random.randn(self.W_SIZE)*alpha*0.1
         # if self.theta is None:
         #     self.theta = np.random.randn(self.T_SIZE)*beta*0.1
+        w = self.w
         theta = self.theta
 
         denv = VsEnv(draw_opp, game=Geister2(), seed=seed)
@@ -102,14 +85,27 @@ class REINFORCEAgent(IAgent):
 
                 x = nx
                 a = na
-            dlts = self.fit(xa_list, x_list, xs_list, r)
+            for xa, x, xs in zip(xa_list, x_list, xs_list):
+                q = 2/(1 + np.exp(-np.dot(w, xs))) - 1
+                dlt = r - q  # 報酬予測は事後状態を用いてはならない
+                dlts.append(dlt**2)
+                w += beta*dlt*xs
+                hs = x.dot(theta)
+                hs -= hs.max()  # overflow回避のため
+                exps = np.exp(hs)
+                pis = exps/exps.sum()
+                theta += alpha*r*(xa - pis.dot(x))
+                # 焼きなまし法
+                # theta += alpha*(episode/max_episodes)*r*(xa - pis.dot(x))
 
             if draw_opp is None:
-                results_y.append(r)
-            dlt_y.append(np.array(dlts).mean())
+                print("not implemented")
             if draw_mode and ((episode+1) % plt_intvl == 0):
+                dlts_y.append(np.array(dlts).mean())
+                dlts = []
                 if draw_opp is not None:
                     denv._opponent = draw_opp
+                    r_sum = 0.0
                     for bttl_i in range(plt_bttl):
                         afterstates = denv.on_episode_begin(self.init_red())
                         x = self.get_x(afterstates)
@@ -122,7 +118,8 @@ class REINFORCEAgent(IAgent):
                             na = self.get_act(nx, theta)
                             x = nx
                             a = na
-                        results_y.append(r)
+                        r_sum += r
+                    results_y.append(r_sum/plt_bttl)
                 episodes_x.append(episode)
                 # 一つ目 results
                 plt.figure(2)
@@ -133,12 +130,10 @@ class REINFORCEAgent(IAgent):
                 plt.text(50, 0.4, "beta="+str(self.beta))
                 x_list = np.array(episodes_x)
                 y_list = np.array(results_y)
-                y_list = y_list.reshape(-1, plt_intvl if draw_opp is None else plt_bttl)
-                means = y_list.mean(axis=1)
-                plt.plot(x_list, means)
+                plt.plot(x_list, y_list)
                 plt.pause(0.0001)  # pause a bit so that plots are updated
                 plt.clf()
-                # 二つ目 予測誤差 Δv(s)
+                # 二つ目 予測誤差 Δv(s)^2
                 plt.figure(1)
                 plt.title('Training...')
                 plt.xlabel('Episode')
@@ -146,13 +141,12 @@ class REINFORCEAgent(IAgent):
                 plt.text(50, 0.5, "alpha="+str(self.alpha))
                 plt.text(50, 0.4, "beta="+str(self.beta))
                 x_list = np.array(episodes_x)
-                y_list = np.array(dlt_y)
-                y_list = y_list.reshape(-1, plt_intvl)
-                means = y_list.mean(axis=1)
-                plt.plot(x_list, means)
+                y_list = np.array(dlts_y)
+                plt.plot(x_list, y_list)
                 plt.pause(0.0001)  # pause a bit so that plots are updated
                 plt.clf()
 
+        # 学習終了後
         if (draw_mode):
             # 一つ目 results
             plt.figure(2)
@@ -163,11 +157,9 @@ class REINFORCEAgent(IAgent):
             plt.text(50, 0.4, "beta="+str(self.beta))
             x_list = np.array(episodes_x)
             y_list = np.array(results_y)
-            y_list = y_list.reshape(-1, plt_intvl if draw_opp is None else plt_bttl)
-            means = y_list.mean(axis=1)
-            plt.plot(x_list, means)
+            plt.plot(x_list, y_list)
             plt.show()
-            # 二つ目 予測誤差 Δv(s)
+            # 二つ目 予測誤差 Δv(s)^2
             plt.figure(1)
             plt.title('Training...')
             plt.xlabel('Episode')
@@ -175,10 +167,8 @@ class REINFORCEAgent(IAgent):
             plt.text(50, 0.5, "alpha="+str(self.alpha))
             plt.text(50, 0.4, "beta="+str(self.beta))
             x_list = np.array(episodes_x)
-            y_list = np.array(dlt_y)
-            y_list = y_list.reshape(-1, plt_intvl)
-            means = y_list.mean(axis=1)
-            plt.plot(x_list, means)
+            y_list = np.array(dlts_y)
+            plt.plot(x_list, y_list)
             plt.show()
 
     def get_act(self, x, theta):

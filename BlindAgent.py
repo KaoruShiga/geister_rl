@@ -40,17 +40,20 @@ def learn():
 
 def learnVsSelf():
     file_name = "weights/blindvsself2"
-    seed = 124
+    seed = 122
     game = Geister2()
-    agent = load_agent("weights/weights_10/reinforce_6",
-                       game, seed, BlindAgent)
-    # agent = BlindAgent(game, seed)
-    # agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.00001
-    # agent.theta = np.random.randn(agent.T_SIZE)*agent.beta*0.00001
-    agent.alpha = 0.001
-    agent.beta = 0.00002
+    agent = BlindAgent(game, seed)
+    agent.alpha = 0.02
+    agent.beta = 0.000002
+    agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.00001
+    agent.theta = np.random.randn(agent.T_SIZE)*agent.beta*0.00001
+    # opponent = BlindAgent(game, seed)
+    # opponent.alpha = 0.00001
+    # opponent.beta = 0.00000002
+    # opponent.w = np.random.randn(opponent.W_SIZE)*opponent.alpha*0.00001
+    # opponent.theta = np.random.randn(opponent.T_SIZE)*opponent.beta*0.00001
     opponent = agent  # 自己対戦
-    env = VsEnv2(opponent, game, seed)
+    env = VsEnv(opponent, game, seed)
     rndagent = RandomAgent(game, seed)
     # 計測準備
     pr = cProfile.Profile()
