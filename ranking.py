@@ -12,7 +12,7 @@ from battle import battle
 from battle import battle2
 
 
-agentsnum = 18
+agentsnum = 9
 seed = None
 bttl_num = 3
 threshold = 0.2
@@ -54,9 +54,12 @@ def add_in_ranking(path_list):
         rank_agents = load_agents(ranking_path, game, seed)
         for j in range(len(rank_agents)):
             rank_agent = rank_agents[j]
+            # resultはagentの勝率
             result = battle(agent, rank_agent, bttl_num=bttl_num, seed=seed)
             results.append(result)
-            ranking_r[j] = (ranking_r[j]*ranking_n[j]+result)/(ranking_n[j]+1)
+            # 対戦相手の勝率を更新
+            r_opp = -result
+            ranking_r[j] = (ranking_r[j]*ranking_n[j]+r_opp)/(ranking_n[j]+1)
             ranking_n[j] += 1
         results = np.array(results)
         # 基準を満たしていない場合

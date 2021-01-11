@@ -60,8 +60,8 @@ class REINFORCEAgent(IAgent):
         #     self.theta = np.random.randn(self.T_SIZE)*beta*0.1
         w = self.w
         theta = self.theta
-
-        denv = VsEnv(draw_opp, game=Geister2(), seed=seed)
+        if draw_mode:
+            denv = VsEnv(draw_opp, game=Geister2(), seed=seed)
         for episode in range(max_episodes):
             afterstates = env.on_episode_begin(self.init_red())
             xs = self.get_x([env.get_state()])[0]
@@ -98,8 +98,9 @@ class REINFORCEAgent(IAgent):
                 # 焼きなまし法
                 # theta += alpha*(episode/max_episodes)*r*(xa - pis.dot(x))
 
-            if draw_opp is None:
+            if draw_opp is None and draw_mode:
                 print("not implemented")
+                raise Exception
             if draw_mode and ((episode+1) % plt_intvl == 0):
                 dlts_y.append(np.array(dlts).mean())
                 dlts = []
