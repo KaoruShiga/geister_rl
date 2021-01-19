@@ -64,7 +64,8 @@ if __name__ == "__main__":
     # # 4. 引数を解析
     # args = parser.parse_args()
 
-    file_name = "weights/weights_10/reinforce_6_theta.npy"  # 今までより強い
+    # file_name = "weights/weights_10/reinforce_6_theta.npy"  # 今までより強い
+    file_name = "ranking_learn/weights/rankRF91_theta.npy"
     game = Geister2()
     agent = REINFORCEAgent(game)
     agent.theta = np.load(file_name)

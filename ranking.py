@@ -89,7 +89,8 @@ if __name__ == '__main__':
     all_path_list = ['weights/weights_'+str(j)+'/reinforce_'+str(i)
                      for i in range(1, 10) for j in range(2, 16) if j != 9]
     all_path_list += ['weights/rfvsrnd'+str(i) for i in range(1, 6)]
-    all_path_list += ['weights/blindvsself1']
+    # all_path_list += ['weights/blindvsself1']
+    all_path_list += ['ranking_learn/weights/rankRF'+str(i) for i in range(1, 94)]
     while(True):
         path_list = random.choices(all_path_list, k=n)
         add_in_ranking(path_list)

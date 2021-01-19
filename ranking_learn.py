@@ -5,16 +5,17 @@ import pstats
 import numpy as np
 from geister2 import Geister2
 from vsenv import VsEnv
+from vsenvs import VsEnvs
 from reinforce_agent import REINFORCEAgent
 from load_ import load_agent
 from load_ import load_agents
 from battle import battle
 
 # エージェントの学習中のパラメータ
-max_episodes = 10000
+max_episodes = 5000
 
 # rankingに関するパラメタ
-num_rankingagents = 9
+num_rankingagents = 18
 bttl_num = 20
 threshold = 0.2
 # rankingに関するパス
@@ -88,37 +89,37 @@ def ranking_learn(game):
 
     # rank agentsの重みの読み込み
     game = Geister2()
+    train_is = rnd.sample(range(num_rankingagents), num_rankingagents//2)
+    test_is = [i for i in range(num_rankingagents) if i not in train_is]
     rank_agents = load_agents(ranking_path, game, None)
+    train_agents = [rank_agents[i] for i in train_is]
+    test_agents = [rank_agents[i] for i in test_is]
 
     # 新しいagentの作成
     agent = pick_agent(game)
     agent_path = weights_path + "/rankRF" + str(num_weights)
     # agnetの学習
-    env = VsEnv(agent, game, None)  # 対戦相手はあとから変更する
-    for episode in range(max_episodes):
-        # # 対戦相手は，ランダムに選ぶ
-        # for j in rnd.sample(range(agents_len), agents_len):
-        env._opponent = rnd.choice(rank_agents)  # 対戦相手はランダムに一度だけ
-        agent.learn(env, max_episodes=1)
+    env = VsEnvs(train_agents, game, None)  # 対戦相手はランダムに一度だけ
+    agent.learn(env, max_episodes=max_episodes)
 
-    # 最新のランキングに対して改めて対戦を行い，
+    # 最新のランキングに対して改めて対戦を行い，(test_agentsのみ更新)
     # 基準を満たしていれば，agentのランキングへの追加
     results = []
-    rank_agents = load_agents(ranking_path, game, None)
-    for j in range(len(rank_agents)):
-        rank_agent = rank_agents[j]
+    for i in test_is:
+        test_agent = rank_agents[i]
         # resultはagentの勝率
-        result = battle(agent, rank_agent, bttl_num=bttl_num, seed=None)
+        result = battle(agent, test_agent, bttl_num=bttl_num, seed=None)
         results.append(result)
         # 対戦相手の勝率を更新
         r_opp = -result
-        ranking_r[j] = (ranking_r[j]*ranking_n[j]+r_opp)/(ranking_n[j]+1)
-        ranking_n[j] += 1
+        ranking_r[i] = (ranking_r[i]*ranking_n[i]+r_opp)/(ranking_n[i]+1)
+        ranking_n[i] += 1
     results = np.array(results)
     # 基準を満たしている場合(rが一定値以上かつ過半数に対し勝利),ランキングに追加
     if (results.mean() > threshold and
             len(np.where(results > 0)[0]) > num_rankingagents/2):
-        dl_index = ranking_r.index(min(ranking_r))  # ランキングの削除対象
+        # ランキングの削除対象(test_agentsのうち勝率が最低のもの)
+        dl_index = ranking_r.index(min([ranking_r[i] for i in test_is]))
         ranking_path[dl_index] = agent_path
         ranking_n[dl_index] = ranking_r[dl_index] = 0
 
@@ -130,7 +131,7 @@ def ranking_learn(game):
     # ranking_learnのデータ書き込み
     with open(ranking_data_path, 'wt') as fout:
         csvout = csv.writer(fout)
-        datas = [[str(num_weights)], [str(num_rankingagents)]]
+        datas = [[str(num_weights)]]
         csvout.writerows(datas)
 
     # ランキングデータの書き込み
