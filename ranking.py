@@ -91,7 +91,7 @@ if __name__ == '__main__':
     all_path_list += ['weights/rfvsrnd'+str(i) for i in range(1, 6)]
     # all_path_list += ['weights/blindvsself1']
     all_path_list += ['ranking_learn/weights/rankRF'+str(i) for i in range(1, 300)]
-    all_path_list += ['weights/weights_17/vsself'+str(i) for i in range(1, 4)]
+    all_path_list += ['weights/weights_17/vsself'+str(i) for i in range(1, 15)]
     while(True):
         path_list = random.choices(all_path_list, k=n)
         add_in_ranking(path_list)

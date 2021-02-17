@@ -58,16 +58,18 @@ def tcp_connect(agent, game, port, host="localhost"):
 
 
 if __name__ == "__main__":
-    # parser = argparse.ArgumentParser(description='TCP接続するクライエント')    # 2. パーサを作る
+    # parser = argparse.ArgumentParser(description='TCP接続するクライエント')  # 2. パーサを作る
     # # 3. parser.add_argumentで受け取る引数を追加していく
     # parser.add_argument('-p', '--port', type=int, default=10000)
     # # 4. 引数を解析
     # args = parser.parse_args()
 
-    # file_name = "weights/weights_10/reinforce_6_theta.npy"  # 今までより強い
-    file_name = "ranking_learn/weights/rankRF91_theta.npy"
+    # file_name = "weights/weights_10/reinforce_6_theta.npy"  # 今までより少し強い
+    # file_name = "ranking_learn/weights/rankRF91_theta.npy"
+    file_name = "weights/weights_17/vsself11_theta.npy"  # なぜかめっちゃ強い
     game = Geister2()
     agent = REINFORCEAgent(game)
     agent.theta = np.load(file_name)
     # "itolab.asuscomm.com", "localhost"
-    tcp_connect(agent=agent, game=game, port=10001, host="localhost")
+    # first_player: port=10000, second_player: port=10001
+    tcp_connect(agent=agent, game=game, port=10000, host="itolab.asuscomm.com")
