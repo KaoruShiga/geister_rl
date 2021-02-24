@@ -214,7 +214,7 @@ class REINFORCEAgent(IAgent):
         a_size = len(afterstates)
         s1_size = self.S_SIZE + 1  # 通常サイズ+バイアス項
         x = np.array(states_1ht)
-        # # 二駒関係
+        # # 二駒関係v1
         # y = np.array([np.dot(s.reshape(-1, 1), s.reshape(1, -1)) for s in x])
         #     .reshape(a_size, -1)
         # 二駒関係v2

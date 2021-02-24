@@ -4,7 +4,7 @@ import unit
 
 
 class Geister:
-    colorIndex = {'B': 0, 'b': 1, 'R': 2, 'r':3, 'U': 4, 'u': 5}
+    colorIndex = {'B': 0, 'b': 1, 'R': 2, 'r': 3, 'U': 4, 'u': 5}
     num2color = ['B', 'b', 'R', 'r', 'U', 'u']
     def __init__(self, info=b"14U24U34U44U15U25U35U45U41u31u21u11u40u30u20u10u"):
         self.state = info.decode()
@@ -29,9 +29,9 @@ class Geister:
     def setRed(self, red):
         for i in range(8):
             if self.units[i].name in red:
-                self.units[i].color = 2 #if i < 8 else 3
+                self.units[i].color = 2  #if i < 8 else 3
             else:
-                self.units[i].color = 0 #if i < 8 else 1
+                self.units[i].color = 0  #if i < 8 else 1
 
     def printBoard(self):
         color = list(Geister.colorIndex.keys())
@@ -74,7 +74,7 @@ class Geister:
             x -= 1
         elif direct == 3:
             y += 1
-        return field[y][x] == None or field[y][x] % 2
+        return field[y][x] is None or field[y][x] % 2
 
     def getLegalMove(self):
         colorField = [[None] * 6 for _ in range(6)]
@@ -187,7 +187,6 @@ class Geister:
                     if taker == 4:
                         return -3
         return 0
-
 
 
 if __name__ == "__main__":

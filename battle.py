@@ -9,9 +9,29 @@ from random_agent import RandomAgent
 from load_ import load_agent
 
 
+# 次の手番はagent1, tmp_gameに関して破壊的
+def battle_from(agent1, agent2, tmp_game=None, seed=None):
+    agent1._game = agent2._game = tmp_game
+    agents = [agent1, agent2]
+    player = 0
+    while not tmp_game.is_ended():
+        agent = agents[player]
+        states = tmp_game.after_states()
+        i_act = agent.get_act_afterstates(states)
+        tmp_game.on_action_number_received(i_act)
+        tmp_game.changeSide()
+
+        player = (player+1) % 2
+    if player == 1:
+        tmp_game.changeSide()
+    result = tmp_game.checkResult()
+    dst = (1 if (result > 0) else (-1 if (result < 0) else 0))
+    return dst
+
+
 # agents1 とagents2の全ての対戦カードの平均報酬を出力
 def battle2(agents1, agents2, bttl_num=1, seed=None):
-    game = Geister2()
+    game = agents1._game
     means = np.zeros(len(agents1)*len(agents2)).reshape(len(agents1), len(agents2))
     for i in range(len(agents1)):
         for j in range(len(agents2)):
@@ -44,7 +64,7 @@ def battle2(agents1, agents2, bttl_num=1, seed=None):
 
 # agent1の平均報酬を出力
 def battle(agent1, agent2, bttl_num=1, seed=None):
-    game = Geister2()
+    game = agent1._game
     results = np.zeros(bttl_num)
     agents = [agent1, agent2]
     for t in range(bttl_num):
