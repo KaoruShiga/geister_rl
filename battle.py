@@ -31,7 +31,7 @@ def battle_from(agent1, agent2, tmp_game=None, seed=None):
 
 # agents1 とagents2の全ての対戦カードの平均報酬を出力
 def battle2(agents1, agents2, bttl_num=1, seed=None):
-    game = agents1._game
+    game = agents1[0]._game
     means = np.zeros(len(agents1)*len(agents2)).reshape(len(agents1), len(agents2))
     for i in range(len(agents1)):
         for j in range(len(agents2)):

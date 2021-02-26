@@ -190,7 +190,7 @@ def selfplay(file_name, agent=None):
 
 if __name__ == "__main__":
     import load_
-    i = 26
+    i = 35
     while(True):
         past_path = "weights/weights_17/vsself"+str(i)
         file_name = "weights/weights_17/vsself"+str(i+1)
