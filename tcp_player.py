@@ -68,10 +68,12 @@ if __name__ == "__main__":
     # file_name = "weights/weights_10/reinforce_6_theta.npy"  # 今までより少し強い
     # file_name = "ranking_learn/weights/rankRF91_theta.npy"
     # file_name = "weights/weights_17/vsself11_theta.npy"  # なぜかめっちゃ強い
-    file_name = "weights/weights_17/vsself38_theta.npy"  # もう少し強い...たぶん
+    # file_name = "weights/weights_17/vsself38_theta.npy"  # もう少し強い...たぶん
+    file_name = "weights/weights_17/vsself63_theta.npy"  # 不明
     game = Geister2()
     agent = REINFORCEAgent(game)
     agent.theta = np.load(file_name)
     # "itolab.asuscomm.com", "localhost"
+
     # first_player: port=10000, second_player: port=10001
     tcp_connect(agent=agent, game=game, port=args.port, host=args.host)
