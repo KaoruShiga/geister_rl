@@ -9,6 +9,7 @@
  3. 解凍したフォルダに移動してpythonを実行する
 
     tcpで対戦する場合 > python tcp_player.py -p 10000 --host localhost
+    
     学習をする場合(要コード改変) > python self_learn.py
 
 2021年大会で用いたプログラムの概要
