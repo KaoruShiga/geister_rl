@@ -7,13 +7,14 @@ from vsenvs import VsEnvs
 from reinforce_agent import REINFORCEAgent
 from random_agent import RandomAgent
 
-def self_play(file_name, agent=None):
+
+def self_play(file_name, agent=None, max_train=50000):
     seed = 0
-    max_episodes = 50000
-    plt_intvl = max_episodes/10
+    max_episodes = max_train
+    plt_intvl = max_episodes + 1  # プロットしない
     plt_bttl = 200
     linestyle = '-'  # alphaに相当 # linestyle=(0, (1, 0))
-    plt_color = 'k'  # betaに相当,mマゼンタ(紫),cシアン(青緑)
+    plt_color = 'k'  # betaに相当, # mマゼンタ(紫),cシアン(青緑)なども
     alpha = 0.001
     beta = 0.0001
 
@@ -32,8 +33,8 @@ def self_play(file_name, agent=None):
     env = VsEnv(agent, game, seed)
     denv = VsEnv(rnd_agent, game, seed)
     for episode in range(max_episodes):
-        agent.alpha = alpha * (1 - episode/max_episodes)
-        agent.beta = beta * (1 - episode/max_episodes)
+        agent.alpha = alpha  # * (1 - episode/max_episodes)
+        agent.beta = beta   # * (1 - episode/max_episodes)
         agent.learn(env, max_episodes=1)
         # 定期的にランダムとの対戦結果を描画
         if (episode) % plt_intvl == 0:
@@ -80,11 +81,13 @@ def self_play(file_name, agent=None):
 
 if __name__ == "__main__":
     import load_
-    i = 64
+    seed = None
+    max_train = 10000
+    i = 176
     while(True):
-        past_path = "weights/weights_17/vsself"+str(i)
-        file_name = "weights/weights_17/vsself"+str(i+1)
+        past_path = "weights/vsself2/vsself"+str(i)
+        file_name = "weights/vsself2/vsself"+str(i+1)
         game = Geister2()
-        agent = load_.load_agent(past_path, game, seed=0)
-        self_play(file_name, agent)
+        agent = load_.load_agent(past_path, game, seed=seed)
+        self_play(file_name, agent, max_train)
         i += 1
