@@ -10,11 +10,11 @@
 
     例: ファイル名vsself500_theta.npyをθとしてjavaserver(https://github.com/miyo/geister_server.java)に接続したい場合
     
-    tcpで対戦する場合 > python tcp_player.py --port 10000 --games 5000 --path weights\vsself2\vsself500
+         python tcp_player.py --port 10000 --games 5000 --path weights\vsself2\vsself500
     
     例:学習を継続したい場合
     
-    学習をする場合 > python self_play.py -i 500
+          python self_play.py -i 500
     
     (学習を新しく始める場合はソースコードの改変が必要です)
 
