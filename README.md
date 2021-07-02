@@ -12,9 +12,9 @@
     
          python tcp_player.py --port 10000 --games 5000 --path weights\vsself2\vsself500
     
-    例:学習を継続したい場合(学習を新しく始める場合はソースコードの改変が必要です)
+    例:900万回以降の学習を行いたい場合(学習を新しく始める場合はソースコードの改変が必要です)
     
-          python self_play.py -i 500
+          python self_play.py -i 900
 
 2021年大会で用いたプログラムの概要
 1. 一手先の盤面の行動優先度が最も高い手を選択する．
