@@ -1,3 +1,4 @@
+# reinforce と書いてあるがREINFORCE with baselineを実装している
 import random
 import cProfile
 import pstats
@@ -85,6 +86,7 @@ class REINFORCEAgent(IAgent):
 
                 x = nx
                 a = na
+            # reinforce と書いてあるがREINFORCE with baselineを実装している
             for xa, x, xs in zip(xa_list, x_list, xs_list):
                 q = 2/(1 + np.exp(-np.dot(w, xs))) - 1
                 dlt = r - q  # 報酬予測は事後状態を用いてはならない
