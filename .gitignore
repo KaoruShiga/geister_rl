@@ -1,3 +1,7 @@
 
 *.pyc
 .idea/*
+space_for_kernel0.py
+space_for_kernel.py
+.idea/workspace.xml
+__pycache__/geister2.cpython-37.pyc

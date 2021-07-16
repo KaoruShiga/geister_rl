@@ -193,6 +193,32 @@ class Geister2(Geister):
             dst.append(list)
         return dst
 
+    def real_state(self):
+        state = [0 for _ in range(6*6)]
+        side_list = [0, 0, 0, 0, 0, 0]
+        for unit in self.units:
+            # colorIndex = {'B': 0, 'b': 1, 'R': 2, 'r':3} 大文字は味方
+            if unit.x == 9 and unit.y == 9:  # 取られた駒
+                if unit.color == 0:    # BLUE(味方の青)
+                    side_list[2] += 1
+                if unit.color == 2:    # RED(味方の赤)
+                    side_list[3] += 1
+                if unit.color == 1:    # b(敵の青)
+                    side_list[0] += 1
+                if unit.color == 3:    # r(敵の赤)
+                    side_list[1] += 1
+            elif unit.x == 8 and unit.y == 8:   # 脱出駒
+                side_list[5] = 1
+            elif unit.color == 0:    # BLUE(味方の青)
+                state[unit.x+6*unit.y] = "B"
+            elif unit.color == 2:    # RED(味方の赤)
+                state[unit.x+6*unit.y] = "R"
+            elif unit.color == 1:     # b(敵の青)
+                state[unit.x+6*unit.y] = "b"
+            else:                     # r(敵の赤)
+                state[unit.x+6*unit.y] = "r"
+        return state+side_list
+
 
 if __name__ == "__main__":
     # # test for after_states

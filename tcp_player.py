@@ -1,10 +1,10 @@
 import numpy as np
 import client
 import argparse
-from geister import Geister
 from geister2 import Geister2
 from random_agent import RandomAgent
 from reinforce_agent import REINFORCEAgent
+from greedy_agent import GreedyAgent
 
 
 class TCPPlayer():
@@ -15,32 +15,9 @@ class TCPPlayer():
     def get_hand(self, state):
         self._game.setState(state=state)
 
-        # # 脱出可能か検討
-        # ext_lvl = np.array([
-        #     8, 7, 6, 6, 7, 8,
-        #     7, 6, 5, 5, 6, 7,
-        #     6, 5, 4, 4, 5, 6,
-        #     5, 4, 3, 3, 4, 5,
-        #     4, 3, 2, 2, 3, 4,
-        #     3, 2, 1, 1, 2, 3
-        # ])
-        # ext_opp_lvl = np.array([
-        #     3, 2, 1, 1, 2, 3,
-        #     4, 3, 2, 2, 3, 4,
-        #     5, 4, 3, 3, 4, 5,
-        #     6, 5, 4, 4, 5, 6,
-        #     7, 6, 5, 5, 6, 7,
-        #     8, 7, 6, 6, 7, 8
-        # ])
-        # states = self._game.crr_state()
-        # max_lvl = (np.array(states[0][0:6 * 6]) * ext_lvl).max()
-        # if (max_lvl > (np.array(states[2][0:6 * 6]) * ext_lvl).max()):
-        #     max_lvl_opp = (np.array(states[2][0:6 * 6]) * ext_opp_lvl).max()
-        #     if (max_lvl >= max_lvl_opp):
-        #         # 以下確実に脱出可能な場合
+        # # 脱出可能か検討...してない
 
-        # 脱出可能だと判定できなかった場合
-        act_i = self.agent.get_greedy_a(self._game.after_states())
+        act_i = self.agent.get_act_afterstates(self._game.after_states())
         i, dir = self._game.legalMoves()[act_i]
         unit_names = ["A", "B", "C", "D", "E", "F", "G", "H"]
         unit_name = unit_names[i]
@@ -50,30 +27,56 @@ class TCPPlayer():
 
     def init_red(self):
         return "".join(self.agent.init_red())
+        # return "".join(["A", "B", "C", "D"])
 
 
-def tcp_connect(agent, game, port, host="localhost"):
+def tcp_connect(agent, game, port, host="localhost", games=1):
+    rs = [0, 0, 0]  # rs = [win, draw, lost]
     player = TCPPlayer(agent=agent, game=game)
-    client.run(player, port, host)
+    for _ in range(args.games):
+        result = client.run(player, port, host)
+        rs[result] += 1
+        sleep(0.1)
+    return rs
 
 
 if __name__ == "__main__":
+    from time import sleep
     parser = argparse.ArgumentParser(description='TCP接続するクライエント')  # 2. パーサを作る
     # # 3. parser.add_argumentで受け取る引数を追加していく
     parser.add_argument('-p', '--port', type=int, default=10000)
     parser.add_argument('--host', type=str, default="localhost")
+    parser.add_argument('--games', type=int, default=1)
+    parser.add_argument('--isGreedy', type=bool, default=True)
+    parser.add_argument('--path', type=str)
+    # 例:
+    # python tcp_player.py --port 10000 --games 5000 --path C:\Users\maoru\Documents\geister_v2\weights\vsself2\vsself500
+    # file name: vsself500_theta.npy
+    # first_player: port=10000, second_player: port=10001
+
     # # 4. 引数を解析
     args = parser.parse_args()
-
-    # file_name = "weights/weights_10/reinforce_6_theta.npy"  # 今までより少し強い
-    # file_name = "ranking_learn/weights/rankRF91_theta.npy"
-    # file_name = "weights/weights_17/vsself11_theta.npy"  # なぜかめっちゃ強い
-    # file_name = "weights/weights_17/vsself38_theta.npy"  # もう少し強い...たぶん
-    file_name = "weights/weights_17/vsself63_theta.npy"  # 不明
     game = Geister2()
-    agent = REINFORCEAgent(game)
-    agent.theta = np.load(file_name)
-    # "itolab.asuscomm.com", "localhost"
+    agent = GreedyAgent(game) if args.isGreedy else REINFORCEAgent(game)
+    path_theta = args.path + "_theta.npy"
+    agent.theta = np.load(path_theta)
 
-    # first_player: port=10000, second_player: port=10001
-    tcp_connect(agent=agent, game=game, port=args.port, host=args.host)
+    # rs = [win, draw, lost]
+    rs = tcp_connect(agent=agent, game=game, port=args.port, host=args.host, games=args.games)
+    print("win, draw, lost = ")
+    print(rs)
+
+
+
+    # # path_theta = args.path + "_theta.npy"
+    # path = "C:/Users/maoru/Documents/geister_v2/weights/vsself2/vsself"
+    # paths_theta = [path + str(a) + "_theta.npy" for a in [0, 30, 400, 900]]
+    #
+    # # rs = [win, draw, lost]
+    # rs_list = []
+    # for p_t in paths_theta:
+    #     agent.theta = np.load(p_t)
+    #     rs = tcp_connect(agent=agent, game=game, port=args.port, host=args.host, games=args.games)
+    #     rs_list.append(rs)
+    # print("win, draw, lost = ")
+    # print(rs_list)

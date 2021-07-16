@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a1e951cb-bf72-4460-b218-21df62f824ee" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ranking.py" beforeDir="false" afterPath="$PROJECT_DIR$/ranking.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ranking_learn.py" beforeDir="false" afterPath="$PROJECT_DIR$/ranking_learn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ranking_learn/ranking_data" beforeDir="false" afterPath="$PROJECT_DIR$/ranking_learn/ranking_data" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ranking_learn/rankings" beforeDir="false" afterPath="$PROJECT_DIR$/ranking_learn/rankings" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rankings" beforeDir="false" afterPath="$PROJECT_DIR$/rankings" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tcp_player.py" beforeDir="false" afterPath="$PROJECT_DIR$/tcp_player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/battle.py" beforeDir="false" afterPath="$PROJECT_DIR$/battle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/make_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/make_graph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_play.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_play.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

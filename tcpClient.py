@@ -21,7 +21,7 @@ class Client:
                 break  # 失敗しなかった時はループを抜ける
         else:
             pass  # リトライが全部失敗した時の処理
-        
+
     def reconnect(self):
         self.connect(self.host, self.port)
 

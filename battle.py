@@ -1,12 +1,73 @@
-import random
 import numpy as np
-import matplotlib.pyplot as plt
 from geister2 import Geister2
-from vsenv import VsEnv
-from mcagent import MCAgent
-from reinforce_agent import REINFORCEAgent
-from random_agent import RandomAgent
 from load_ import load_agent
+
+MAX_T = 200  # don't forget it.
+
+
+def battle_get_kifu(agent1, agent2, bttl_num, seed=None):
+    kifus = []
+    results = []  # results, 0=>win, 1=>draw, 2=>lost for i
+    game = agent1._game
+    for t in range(bttl_num):
+        kifu = []
+        agent_s = (agent1, agent2)
+        arr0, arr1 = (agent.init_red() for agent in agent_s)
+        game.__init__()
+        game.setRed(arr0)
+        game.changeSide()
+        game.setRed(arr1)
+        game.changeSide()
+        player = 0
+        for _ in range(MAX_T):
+            if player == 0:
+                kifu.append(game.real_state())
+            agent = agent_s[player]
+            states = game.after_states()
+            i_act = agent.get_act_afterstates(states)
+            game.on_action_number_received(i_act)
+            game.changeSide()
+            player = (player+1) % 2
+            if game.is_ended():
+                break
+        if player == 1:
+            game.changeSide()
+        result = game.checkResult()
+        r = (0 if (result > 0) else (1 if (result == 0) else 2))
+        results.append(r)
+        kifus.append(kifu)
+    return (kifus, results)
+
+def battle2_get_results(agents1, agents2, bttl_num=1, seed=None):
+    game = agents1[0]._game
+    results = np.zeros(len(agents1)*len(agents2)*3).reshape(len(agents1), len(agents2), 3)
+    # results[i][j], 0=>win, 1=>draw, 2=>lost for i
+    for i in range(len(agents1)):
+        for j in range(len(agents2)):
+            for t in range(bttl_num):
+                agent_s = (agents1[i], agents2[j])
+                arr0, arr1 = (agent.init_red() for agent in agent_s)
+                game.__init__()
+                game.setRed(arr0)
+                game.changeSide()
+                game.setRed(arr1)
+                game.changeSide()
+                player = 0
+                for _ in range(MAX_T):
+                    agent = agent_s[player]
+                    states = game.after_states()
+                    i_act = agent.get_act_afterstates(states)
+                    game.on_action_number_received(i_act)
+                    game.changeSide()
+                    player = (player+1) % 2
+                    if game.is_ended():
+                        break
+                if player == 1:
+                    game.changeSide()
+                result = game.checkResult()
+                r = (0 if (result > 0) else (1 if (result == 0) else 2))
+                results[i][j][r] += 1
+    return results
 
 
 # 次の手番はagent1, tmp_gameに関して破壊的
@@ -14,14 +75,15 @@ def battle_from(agent1, agent2, tmp_game=None, seed=None):
     agent1._game = agent2._game = tmp_game
     agents = [agent1, agent2]
     player = 0
-    while not tmp_game.is_ended():
+    for _ in range(MAX_T):
         agent = agents[player]
         states = tmp_game.after_states()
         i_act = agent.get_act_afterstates(states)
         tmp_game.on_action_number_received(i_act)
         tmp_game.changeSide()
-
         player = (player+1) % 2
+        if tmp_game.is_ended():
+            break
     if player == 1:
         tmp_game.changeSide()
     result = tmp_game.checkResult()
@@ -45,14 +107,15 @@ def battle2(agents1, agents2, bttl_num=1, seed=None):
                 game.setRed(arr1)
                 game.changeSide()
                 player = 0
-                while not game.is_ended():
+                for _ in range(MAX_T):
                     agent = agent_s[player]
                     states = game.after_states()
                     i_act = agent.get_act_afterstates(states)
                     game.on_action_number_received(i_act)
                     game.changeSide()
-
                     player = (player+1) % 2
+                    if game.is_ended():
+                        break
                 if player == 1:
                     game.changeSide()
                 result = game.checkResult()
@@ -75,14 +138,15 @@ def battle(agent1, agent2, bttl_num=1, seed=None):
         game.setRed(arr1)
         game.changeSide()
         player = 0
-        while not game.is_ended():
+        for _ in range(MAX_T):
             agent = agents[player]
             states = game.after_states()
             i_act = agent.get_act_afterstates(states)
             game.on_action_number_received(i_act)
             game.changeSide()
-
             player = (player+1) % 2
+            if game.is_ended():
+                break
         if player == 1:
             game.changeSide()
         result = game.checkResult()

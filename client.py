@@ -36,7 +36,7 @@ def run(player, port, host="localhost"):
             res = cl.recv()
             if res[0:3] == b"WON" or res[0:3] == b"LST" or res[0:3] == b"DRW":
                 break
-    score = {"WON": 1, "LST": 0, "DRW": 0.1}
+    score = {"WON": 0, "DRW": 1, "LST": 2}
     return score[res[0:3].decode()]
 
 
