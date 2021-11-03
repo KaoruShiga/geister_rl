@@ -96,7 +96,7 @@ class REINFORCEAgent(IAgent):
                 hs -= hs.max()  # overflow回避のため
                 exps = np.exp(hs)
                 pis = exps/exps.sum()
-                theta += alpha*r*(xa - pis.dot(x))
+                theta += alpha*r*(xa - pis.dot(x))  # rじゃなくdltじゃね?
                 # 焼きなまし法
                 # theta += alpha*(episode/max_episodes)*r*(xa - pis.dot(x))
 

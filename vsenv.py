@@ -90,7 +90,7 @@ class VsEnv:
         self._state = self._game.crr_state()
         return self._game.after_states()
 
-    def __init__(self, opponent, game=Geister2(), seed=0):
+    def __init__(self, opponent, game=Geister2(), seed=None):
         self._opponent = opponent
         self._game = game
         self._seed = seed

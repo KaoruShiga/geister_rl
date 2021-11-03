@@ -41,7 +41,7 @@ def battle_get_kifu(agent1, agent2, bttl_num, seed=None):
 def battle2_get_results(agents1, agents2, bttl_num=1, seed=None):
     game = agents1[0]._game
     results = np.zeros(len(agents1)*len(agents2)*3).reshape(len(agents1), len(agents2), 3)
-    # results[i][j], 0=>win, 1=>draw, 2=>lost for i
+    # results[i][j], 0=>win, 1=>draw, 2=>lost for agents1
     for i in range(len(agents1)):
         for j in range(len(agents2)):
             for t in range(bttl_num):

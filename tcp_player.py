@@ -65,18 +65,3 @@ if __name__ == "__main__":
     rs = tcp_connect(agent=agent, game=game, port=args.port, host=args.host, games=args.games)
     print("win, draw, lost = ")
     print(rs)
-
-
-
-    # # path_theta = args.path + "_theta.npy"
-    # path = "C:/Users/maoru/Documents/geister_v2/weights/vsself2/vsself"
-    # paths_theta = [path + str(a) + "_theta.npy" for a in [0, 30, 400, 900]]
-    #
-    # # rs = [win, draw, lost]
-    # rs_list = []
-    # for p_t in paths_theta:
-    #     agent.theta = np.load(p_t)
-    #     rs = tcp_connect(agent=agent, game=game, port=args.port, host=args.host, games=args.games)
-    #     rs_list.append(rs)
-    # print("win, draw, lost = ")
-    # print(rs_list)
