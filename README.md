@@ -17,7 +17,7 @@
 https://github.com/miyo/geister_server.java
 に接続し，weights\vsself2\vsself900_theta.npy(=500万回時点でのθ)をθとするプレイヤーと対戦させる場合
 
-        python tcp_player.py --port 10000 --games 5000 --path weights\vsself2\vsself900
+        python tcp_player.py --port 10000 --games 5000 --path weights/vsself2/vsself900
 
  2. 900万回時点でのθを使い，学習回数をさらに増やしたい場合
     
