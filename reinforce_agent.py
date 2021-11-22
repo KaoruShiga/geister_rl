@@ -98,7 +98,7 @@ class REINFORCEAgent(IAgent):
                 pis = exps/exps.sum()
                 theta += alpha*dlt*(xa - pis.dot(x))
                 # 焼きなまし法
-                # theta += alpha*(episode/max_episodes)*r*(xa - pis.dot(x))
+                # theta += alpha*(episode/max_episodes)*dlt*(xa - pis.dot(x))
 
             if draw_opp is None and draw_mode:
                 print("not implemented")
