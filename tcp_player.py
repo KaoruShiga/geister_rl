@@ -50,7 +50,7 @@ if __name__ == "__main__":
     parser.add_argument('--isGreedy', type=bool, default=True)
     parser.add_argument('--path', type=str)
     # 例:
-    # python tcp_player.py --port 10000 --games 5000 --path C:\Users\maoru\Documents\geister_v2\weights\vsself2\vsself500
+    # python tcp_player.py --port 10000 --games 5000 --path weights\vsself2\vsself500
     # file name: vsself500_theta.npy
     # first_player: port=10000, second_player: port=10001
 

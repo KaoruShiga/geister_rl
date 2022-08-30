@@ -20,10 +20,10 @@ https://github.com/miyo/geister_server.java
         python tcp_player.py --port 10000 --games 5000 --path weights/vsself2/vsself900
 
  2. 900万回時点でのθを使い，学習回数をさらに増やしたい場合
-    
+
           python self_play.py -i 900
-          
- 3. 学習を新しく始める場合などはソースコードを改変が必要です．
+
+ 3. 学習を新しく始める場合などはソースコードの改変が必要です．
 
 2021年大会で用いたプログラムの概要
 1. 一手先の盤面の行動優先度が最も高い手を選択する．

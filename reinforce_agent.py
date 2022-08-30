@@ -10,32 +10,6 @@ from iagent import IAgent
 from random_agent import RandomAgent
 
 
-def learn():
-    file_name = "weights/rfvsrnd6"
-    seed = 103
-    game = Geister2()
-    agent = REINFORCEAgent(game, seed)
-    agent.w = np.random.randn(agent.W_SIZE)*agent.alpha*0.0001
-    agent.theta = np.random.randn(agent.T_SIZE)*agent.beta*0.0001
-    opponent = RandomAgent(game, seed+1)
-    env = VsEnv(opponent, game, seed)
-    # 計測準備
-    pr = cProfile.Profile()
-    pr.enable()
-    # 計測開始
-    agent.learn(env, seed)
-    # 計測終了，計測結果出力
-    pr.disable()
-    stats = pstats.Stats(pr)
-    stats.sort_stats('cumtime')
-    stats.print_stats()
-    pr.dump_stats('profile.stats')
-    # 事後処理
-
-    np.save(file_name+"_w", agent.w)
-    np.save(file_name+"_theta", agent.theta)
-
-
 class REINFORCEAgent(IAgent):
     def learn(self, env, seed=1, max_episodes=100000,
               draw_mode=False, draw_opp=None):
@@ -97,7 +71,7 @@ class REINFORCEAgent(IAgent):
                 exps = np.exp(hs)
                 pis = exps/exps.sum()
                 theta += alpha*dlt*(xa - pis.dot(x))
-                # 焼きなまし法
+                # 焼きなまし法(?)
                 # theta += alpha*(episode/max_episodes)*dlt*(xa - pis.dot(x))
 
             if draw_opp is None and draw_mode:
@@ -179,7 +153,7 @@ class REINFORCEAgent(IAgent):
 
         a_size = x.shape[0]
         hs = x.dot(theta)
-        hs -= hs.max()  # for prevention of overflow
+        hs -= hs.max()  # prevent overflow
         exps = np.exp(hs)
         pis = exps/exps.sum()
         act_i = np.random.choice(a_size, p=pis)
@@ -190,21 +164,6 @@ class REINFORCEAgent(IAgent):
         arr = ["A", "B", "C", "D", "E", "F", "G", "H"]
         self._rnd.shuffle(arr)
         return arr[0:4]
-    # # using learned weights with no learning.
-    # def init_red(self):
-    #     arr_string = ["A", "B", "C", "D", "E", "F", "G", "H"]
-    #     states = self._game.init_states()
-    #     x = self.get_x(states)
-    #     act_i = self.get_act(x, self.theta)
-    #     state = states[act_i]
-    #     arr = []
-    #     arr[0:4] = state[1][25:29]
-    #     arr[4:8] = state[1][31:35]
-    #     dst = []
-    #     for i in range(len(arr)):
-    #         if arr[i] == 1:
-    #             dst.append(arr_string[i])
-    #     return dst
 
     def get_a_size(self, afterstates):
         return len(afterstates)

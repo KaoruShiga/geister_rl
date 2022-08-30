@@ -5,13 +5,20 @@ from vsenvs import VsEnvs
 from reinforce_agent import REINFORCEAgent
 import load_
 
+
 def self_play2(file_name, game, i, past_agents, max_train=10000, seed=None):
     max_episodes = max_train
     alpha = 0.001
     beta = 0.0001
-    r = 0.5
-    rs = [(1-r)/(len(past_agents)-1) for _ in past_agents]
-    rs[-1] = r
+    r = 1
+    # r : prob of self-play
+    # 1-r: prob of play against historical agents
+
+    if len(past_agents) > 1:
+        rs = [(1-r)/(len(past_agents)-1) for _ in past_agents]
+        rs[-1] = r
+    else:
+        rs = [1]
     np.random.seed(seed)
 
     past_path = file_name+str(i)
@@ -36,18 +43,28 @@ if __name__ == "__main__":
     import argparse
     import pstats
     import cProfile
+    import os
     seed = None
     max_train = 10000
 
     # パーサを作る
-    parser = argparse.ArgumentParser(description='self-play')
+    # parser = argparse.ArgumentParser(description='self-play')
     # parser.add_argumentで受け取る引数を追加していく
-    parser.add_argument('-i', type=int)
+    # parser.add_argument('-i', type=int)
     # 引数を解析
-    args = parser.parse_args()
-    file_name = "weights/vsself3/vsself"
-    i = args.i
-    assert(i > 0)
+    # args = parser.parse_args()
+    # i = args.i
+    dir_name = "weights/vsself4"
+    file_name = "weights/vsself4/vsself"
+    listdir = os.listdir(path=dir_name)
+    ilist = [int(listdir[idx]
+        .replace("vsself", "").replace("_w.npy", "").replace("_theta.npy", ""))
+        for idx in range(len(listdir))]
+    i = max(ilist)
+    assert(i >= 0)
+    # if i == 0:
+    #     np.save(file_name+"0_w", np.zeros(8128))
+    #     np.save(file_name+"0_theta", np.zeros(8128))
 
     game = Geister2()
     paths = [file_name+str(i) for i in range(0, i+1)]
