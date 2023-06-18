@@ -1,4 +1,4 @@
-# reinforce と書いてあるがREINFORCE with baselineを実装している
+# reinforceを実装している
 import random
 import cProfile
 import pstats
@@ -25,14 +25,6 @@ class REINFORCEAgent(IAgent):
         results_y = []
         dlts_y = []
         dlts = []
-        # 読み込み
-        # mcagent.w = np.load("td_4.npy")
-        # wを小さな正規乱数で初期化
-        # np.random.seed(seed)
-        # if self.w is None:
-        #     self.w = np.random.randn(self.W_SIZE)*alpha*0.1
-        # if self.theta is None:
-        #     self.theta = np.random.randn(self.T_SIZE)*beta*0.1
         w = self.w
         theta = self.theta
         if draw_mode:
@@ -60,7 +52,7 @@ class REINFORCEAgent(IAgent):
 
                 x = nx
                 a = na
-            # reinforce と書いてあるがREINFORCE with baselineを実装している
+            # reinforceを実装している
             for xa, x, xs in zip(xa_list, x_list, xs_list):
                 q = 2/(1 + np.exp(-np.dot(w, xs))) - 1
                 dlt = r - q  # 報酬予測は事後状態を用いてはならない
@@ -70,9 +62,9 @@ class REINFORCEAgent(IAgent):
                 hs -= hs.max()  # overflow回避のため
                 exps = np.exp(hs)
                 pis = exps/exps.sum()
-                theta += alpha*dlt*(xa - pis.dot(x))
+                theta += alpha*r*(xa - pis.dot(x))
                 # 焼きなまし法(?)
-                # theta += alpha*(episode/max_episodes)*dlt*(xa - pis.dot(x))
+                # theta += alpha*(episode/max_episodes)*r*(xa - pis.dot(x))
 
             if draw_opp is None and draw_mode:
                 print("not implemented")
@@ -226,7 +218,7 @@ class REINFORCEAgent(IAgent):
                 self.COL_IDS += [j]
 
 
-if __name__ == "__main__":
-    # test()
-    learn()
-    # test2()
+# if __name__ == "__main__":
+#     # test()
+#     learn()
+#     # test2()

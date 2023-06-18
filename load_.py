@@ -2,17 +2,17 @@ import numpy as np
 from reinforce_agent import REINFORCEAgent
 
 
-def load_list(str_list, len=None):
-    dst = []
-    for str in str_list:
-        dst.append(load(str))
-    return dst
+# def load_list(str_list, len=None):
+#     dst = []
+#     for str in str_list:
+#         dst.append(load(str))
+#     return dst
 
 
-def load(str, len=None):
-    dst = np.load(str)
-    assert((len is None) or (len(dst) == len))
-    return dst
+# def load(str, len=None):
+#     dst = np.load(str)
+#     assert((len is None) or (len(dst) == len))
+#     return dst
 
 
 def load_agent(ps_name, game, seed=None, AgentClass=REINFORCEAgent):
